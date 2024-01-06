@@ -7,7 +7,8 @@ export default class Room extends Model {
    * The `models/index` file will call this method automatically.
    */
   static associate(models) {
-    // define association here
+    this.belongsTo(models.Property, { foreignKey: 'room_id' });
+    this.hasMany(models.BookedRoom, { foreignKey: 'room_id' });
   }
 }
 
@@ -38,7 +39,7 @@ export const init = (sequelize) => {
       is_available: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
-        defaultValue: true, 
+        defaultValue: true,
       },
       price: {
         type: DataTypes.DECIMAL(10, 2),
@@ -47,7 +48,7 @@ export const init = (sequelize) => {
     },
     {
       sequelize,
-      modelName: 'Room', 
+      modelName: 'Room',
     },
   );
 };

@@ -7,13 +7,19 @@ export default class BookedRoom extends Model {
    * The `models/index` file will call this method automatically.
    */
   static associate(models) {
-    // define association here
+    this.belongsTo(models.Room, { foreignKey: 'room_id' });
   }
 }
 
 export const init = (sequelize) => {
   BookedRoom.init(
     {
+      booked_room_id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: Sequelize.INTEGER,
+      },
       room_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -33,12 +39,12 @@ export const init = (sequelize) => {
       is_complete: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
-        defaultValue: false, 
+        defaultValue: false,
       },
     },
     {
       sequelize,
-      modelName: 'BookedRoom', 
+      modelName: 'BookedRoom',
     },
   );
 };

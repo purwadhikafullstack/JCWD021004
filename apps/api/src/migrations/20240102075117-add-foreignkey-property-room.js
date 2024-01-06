@@ -4,10 +4,10 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.sequelize.query(`
-      ALTER TABLE users
-      ADD CONSTRAINT fk_user_role
-      FOREIGN KEY (user_id)
-      REFERENCES roles(id)
+      ALTER TABLE rooms
+      ADD CONSTRAINT fk_room_property
+      FOREIGN KEY (property_id)
+      REFERENCES properties(property_id)
       ON UPDATE CASCADE
       ON DELETE CASCADE;
     `);
@@ -15,8 +15,8 @@ module.exports = {
 
   async down(queryInterface, Sequelize) {
     await queryInterface.sequelize.query(`
-      ALTER TABLE users
-      DROP CONSTRAINT IF EXISTS fk_user_role;
+      ALTER TABLE rooms
+      DROP CONSTRAINT IF EXISTS fk_room_property;
     `);
   },
 };

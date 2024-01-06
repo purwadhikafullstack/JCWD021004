@@ -7,7 +7,8 @@ export default class Property extends Model {
    * The `models/index` file will call this method automatically.
    */
   static associate(models) {
-    // define association here
+    this.belongsTo(models.PropertyCategory, { foreignKey: 'property_id' });
+    this.hasMany(models.Room, { foreignKey: 'room_id' });
   }
 }
 
@@ -58,7 +59,7 @@ export const init = (sequelize) => {
     },
     {
       sequelize,
-      modelName: 'Property', 
+      modelName: 'Property',
     },
   );
 };

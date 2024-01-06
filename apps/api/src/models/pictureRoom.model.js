@@ -19,7 +19,7 @@ export const init = (sequelize) => {
         allowNull: false,
       },
       picture: {
-        type: DataTypes.STRING, // adjust the data type based on your requirements
+        type: DataTypes.STRING,
         allowNull: false,
       },
     },

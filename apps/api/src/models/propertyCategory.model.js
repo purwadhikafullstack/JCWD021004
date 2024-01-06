@@ -7,26 +7,26 @@ export default class PropertyCategory extends Model {
    * The `models/index` file will call this method automatically.
    */
   static associate(models) {
-    // define association here
+    this.hasMany(models.Property, { foreignKey: 'property_id' });
   }
 }
 
 export const init = (sequelize) => {
   PropertyCategory.init(
     {
-      id: {
+      category_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
       },
-      name: {
+      category_name: {
         type: DataTypes.STRING,
         allowNull: false,
       },
     },
     {
       sequelize,
-      modelName: 'PropertyCategory', 
+      modelName: 'PropertyCategory',
     },
   );
 };

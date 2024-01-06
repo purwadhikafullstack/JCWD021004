@@ -7,7 +7,7 @@ export default class User extends Model {
    * The `models/index` file will call this method automatically.
    */
   static associate(models) {
-    // define association here
+    this.belongsTo(models.Roles, { foreignKey: 'user_id' });
   }
 }
 
