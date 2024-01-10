@@ -10,22 +10,35 @@ export async function up(queryInterface, Sequelize) {
     },
     role_id: {
       type: Sequelize.INTEGER,
+      allowNull: false,
+    },
+    username: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      unique: true,
     },
     email: {
       type: Sequelize.STRING,
+      allowNull: false,
+      unique: true,
+      validate: {
+        isEmail: true,
+      },
     },
     password: {
       type: Sequelize.STRING,
+      allowNull: false,
     },
     is_verified: {
       type: Sequelize.BOOLEAN,
+      defaultValue: false,
     },
-    created_at: {
+    createdAt: {
       allowNull: false,
       type: Sequelize.DATE,
     },
-    updated_at: {
-      allowNull: false,
+    updatedAt: {
+      allowNull: true,
       type: Sequelize.DATE,
     },
   });

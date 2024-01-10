@@ -1,13 +1,8 @@
 import { Model, DataTypes } from 'sequelize';
 
 export default class User extends Model {
-  /**
-   * Helper method for defining associations.
-   * This method is not a part of Sequelize lifecycle.
-   * The `models/index` file will call this method automatically.
-   */
   static associate(models) {
-    this.belongsTo(models.Roles, { foreignKey: 'user_id' });
+    this.belongsTo(models.Roles, { foreignKey: 'role_id' });
   }
 }
 
@@ -21,11 +16,13 @@ export const init = (sequelize) => {
       },
       role_id: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+      },
+      username: {
+        type: DataTypes.STRING,
+        allowNull: true,
       },
       email: {
         type: DataTypes.STRING,
-        allowNull: false,
         unique: true,
         validate: {
           isEmail: true,
@@ -33,28 +30,25 @@ export const init = (sequelize) => {
       },
       password: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       is_verified: {
         type: DataTypes.BOOLEAN,
-        allowNull: false,
         defaultValue: false,
       },
-      created_at: {
+      createdAt: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
         allowNull: false,
       },
-      updated_at: {
+      updatedAt: {
         type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
-        allowNull: false,
+        allowNull: true,
       },
     },
     {
       sequelize,
-      modelName: 'User',
-      timestamps: true,
+      modelName: 'users',
     },
   );
 };

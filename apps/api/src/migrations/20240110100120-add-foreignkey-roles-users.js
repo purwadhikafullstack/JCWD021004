@@ -6,7 +6,7 @@ module.exports = {
     await queryInterface.sequelize.query(`
       ALTER TABLE users
       ADD CONSTRAINT fk_user_role
-      FOREIGN KEY (user_id)
+      FOREIGN KEY (role_id)
       REFERENCES roles(id)
       ON UPDATE CASCADE
       ON DELETE CASCADE;

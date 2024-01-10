@@ -2,7 +2,7 @@ import { Model, DataTypes } from 'sequelize';
 
 export default class Roles extends Model {
   static associate(models) {
-    this.hasMany(models.User, { foreignKey: 'user_id' });
+    this.hasMany(models.User, { foreignKey: 'role_id' });
   }
 }
 

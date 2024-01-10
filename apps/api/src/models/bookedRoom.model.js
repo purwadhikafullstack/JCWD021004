@@ -18,7 +18,7 @@ export const init = (sequelize) => {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER,
+        type: DataTypes.INTEGER,
       },
       room_id: {
         type: DataTypes.INTEGER,
