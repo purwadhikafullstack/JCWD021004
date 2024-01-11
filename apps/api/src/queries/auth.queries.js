@@ -8,6 +8,7 @@ export const registerQuery = async (email, username) => {
       {
         email,
         username,
+        password: '',
         role_id: 1,
         is_verified: false,
       },
@@ -22,12 +23,13 @@ export const registerQuery = async (email, username) => {
 };
 
 // FIND USER
-export const findUserQuery = async ({ email = null }) => {
+export const findUserQuery = async ({ email = null, username = null }) => {
   try {
     const res = await User.findOne({
       where: {
         [Op.or]: {
           email,
+          username,
         },
       },
     });
