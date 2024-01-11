@@ -1,6 +1,7 @@
 import User from '../models/users.model';
 import { Op } from 'sequelize';
 
+// REGISTRATION
 export const registerQuery = async (email, username) => {
   const t = await User.sequelize.transaction();
   try {
@@ -35,6 +36,18 @@ export const findUserQuery = async ({ email = null, username = null }) => {
     });
 
     return res;
+  } catch (err) {
+    throw err;
+  }
+};
+
+// EMAIL VERIFICATION AND SET PASSWORD
+export const emailVerificationQuery = async (email, password) => {
+  try {
+    await User.update(
+      { isVerified: true, password },
+      { where: { email: email } },
+    );
   } catch (err) {
     throw err;
   }

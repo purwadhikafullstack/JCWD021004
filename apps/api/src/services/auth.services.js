@@ -6,6 +6,7 @@ import fs from 'fs';
 import path from 'path';
 import transporter from '../../utils/transporter';
 
+// REGISTRATION
 export const registerService = async (email, username) => {
   try {
     // CHECK WHETHER OR NOT EMAIL AND USERNAME EXIST
@@ -54,6 +55,31 @@ export const registerService = async (email, username) => {
     });
 
     return res;
+  } catch (err) {
+    throw err;
+  }
+};
+
+// EMAIL VERIFICATION AND SET PASSWORD
+export const emailVerificationService = async (token, password) => {
+  try {
+    const secretKey = process.env.JWT_SECRET_KEY;
+    if (!secretKey) throw new Error('JWT_SECRET_KEY is not set');
+
+    const decoded = jwt.verify(token, secretKey);
+    if (!decoded?.email) throw new Error('Invalid token');
+
+    const isAlreadyVerified = await verifiedUserQuery(decoded.email);
+    if (isAlreadyVerified) throw new Error('User has already been verified');
+
+    const salt = await bcrypt.genSalt(10);
+    const hashPassword = await bcrypt.hash(password, salt);
+
+    await emailVerificationQuery(decoded.email, hashPassword);
+
+    return {
+      message: 'Email is now verified and password is set succesfully.',
+    };
   } catch (err) {
     throw err;
   }

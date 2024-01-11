@@ -1,5 +1,8 @@
 import { Router } from 'express';
-import { registerController } from '../controllers/auth.controller';
+import {
+  registerController,
+  emailVerificationController,
+} from '../controllers/auth.controller';
 import { validator } from '../middleware/validator.middleware';
 import { verifyToken } from '../middleware/auth.middleware';
 import { body } from 'express-validator';
@@ -18,5 +21,8 @@ authRouter.post(
   validator(validations),
   registerController,
 );
+
+// PUT
+authRouter.put('/email-verification', emailVerificationController);
 
 export { authRouter };
