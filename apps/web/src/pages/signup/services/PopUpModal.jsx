@@ -19,10 +19,10 @@ export const SuccessModal = ({ isOpen, onClose }) => {
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader textAlign={'center'} color={'green'} fontSize={'28px'}>
+          <ModalHeader textAlign={'center'} color={'green'} fontSize={'24px'}>
             Success!
           </ModalHeader>
-          <ModalBody textAlign={'center'} color={'black'} fontSize={'16px'}>
+          <ModalBody textAlign={'center'} color={'black'} fontSize={'14px'}>
             Your account is ready! <b>Verify your email address</b> to access
             our latest collection. Act fast, the verification link{' '}
             <b>expires in an hour.</b> Welcome aboard!
