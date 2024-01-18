@@ -8,6 +8,7 @@ import transporter from '../../utils/transporter';
 
 // REGISTRATION
 export const registerService = async (email, username) => {
+  console.log(email, username);
   try {
     // CHECK WHETHER OR NOT EMAIL AND USERNAME EXIST
     const check = await findUserQuery({ email, username });

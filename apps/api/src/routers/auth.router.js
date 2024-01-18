@@ -8,7 +8,7 @@ import { verifyToken } from '../middleware/auth.middleware';
 import { body } from 'express-validator';
 const authRouter = Router();
 
-// VALIDATION
+// VALIDATION USING EXPRESS VALIDATOR
 const validations = [
   body('email').notEmpty().withMessage('Email cannot be emptied'),
   body('email').isEmail().withMessage('Email format is invalid'),
