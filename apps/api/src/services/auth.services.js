@@ -1,4 +1,9 @@
-import { registerQuery, findUserQuery } from '../queries/auth.queries';
+import {
+  registerQuery,
+  findUserQuery,
+  verifiedUserQuery,
+  emailVerificationQuery,
+} from '../queries/auth.queries';
 import bcrypt from 'bcrypt';
 import jwt, { Secret } from 'jsonwebtoken';
 import handlebars from 'handlebars';

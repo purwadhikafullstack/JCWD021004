@@ -18,9 +18,8 @@ export const SuccessModal = ({ isOpen, onClose }) => {
             Success!
           </ModalHeader>
           <ModalBody textAlign={'center'} color={'black'} fontSize={'14px'}>
-            Your account is ready! <b>Verify your email address</b> to access
-            our latest collection. Act fast, the verification link{' '}
-            <b>expires in an hour.</b> Welcome aboard!
+            Your email has been succesfully verified! Now you can dive into our
+            latest collection!
           </ModalBody>
 
           <ModalFooter>
@@ -45,11 +44,11 @@ export const ErrorModal = ({ isOpen, onClose }) => {
     <Modal isOpen={isOpen} onClose={onClose} size={'sm'} isCentered>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader textAlign={'center'} color={'red'} fontSize={'28px'}>
+        <ModalHeader textAlign={'center'} color={'red'} fontSize={'24px'}>
           Failed!
         </ModalHeader>
-        <ModalBody textAlign={'center'} color={'black'} fontSize={'16px'}>
-          Username or email has already existed. Use another username or email.
+        <ModalBody textAlign={'center'} color={'black'} fontSize={'18px'}>
+          Token is invalid!
         </ModalBody>
         <ModalFooter>
           <Button

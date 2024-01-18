@@ -1,4 +1,7 @@
-import { registerService } from '../services/auth.services';
+import {
+  registerService,
+  emailVerificationService,
+} from '../services/auth.services';
 
 // REGISTRATION
 export const registerController = async (req, res) => {

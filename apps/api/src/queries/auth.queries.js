@@ -52,3 +52,17 @@ export const emailVerificationQuery = async (email, password) => {
     throw err;
   }
 };
+
+// CHECK WHETHER OR NOT USER HAS BEEN VERIFIED
+export const verifiedUserQuery = async (email) => {
+  try {
+    return await User.findOne({
+      where: {
+        email: email,
+        is_verified: true,
+      },
+    });
+  } catch (err) {
+    throw err;
+  }
+};
