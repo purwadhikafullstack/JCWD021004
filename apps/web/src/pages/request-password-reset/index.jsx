@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Divider,
   Flex,
   FormControl,
   FormErrorMessage,
@@ -8,29 +9,21 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
-  InputRightElement,
   Text,
   useDisclosure,
   Center,
   Stack,
   FormLabel,
-  Divider,
 } from '@chakra-ui/react';
-import {
-  LockClosedIcon,
-  EyeSlashIcon,
-  EyeIcon,
-} from '@heroicons/react/24/outline';
+import { EnvelopeIcon } from '@heroicons/react/24/outline';
 import { useFormik } from 'formik';
-import { verification } from './service/EditUser';
-import { PasswordSchema } from './service/Validation';
+import { createRequest } from './services/CreateRequestResetPassword';
 import { useState } from 'react';
-import { SuccessModal, ErrorModal } from './service/PopUpModal';
+import { SuccessModal } from './services/PopUpModal';
+import { ErrorModal } from './services/PopUpModal';
 import { BeatLoader } from 'react-spinners';
-function Verification() {
-  const [showPassword, setShowPassword] = useState(false);
-  const [showPasswordConfirmation, setShowPasswordConfirmation] =
-    useState(false);
+import { EmailScheme } from './services/Validation';
+function RequestPasswordReset() {
   const {
     isOpen: isSuccessModalOpen,
     onOpen: openSuccessModal,
@@ -41,6 +34,7 @@ function Verification() {
     onOpen: openErrorModal,
     onClose: closeErrorModal,
   } = useDisclosure();
+
   const override = {
     display: 'block',
     margin: '0 auto',
@@ -50,28 +44,27 @@ function Verification() {
 
   const formik = useFormik({
     initialValues: {
-      password: '',
-      confirmationPassword: '',
+      email: '',
     },
-    validationSchema: PasswordSchema,
+    validationSchema: EmailScheme,
     onSubmit: async (values, { resetForm }) => {
       try {
-        await verification(
-          values.password,
+        await createRequest(
+          values.email,
           setLoading,
           openSuccessModal,
           openErrorModal,
         );
-      } catch (err) {
-        console.log(err.message);
+      } catch {
+        console.log('gagal error');
       }
 
-      resetForm({ values: { password: '', confirmationPassword: '' } });
+      resetForm({ values: { email: '' } });
     },
   });
   return (
     <>
-      <Center height={'85vh'} boxShadow={'base'}>
+      <Center height={'80vh'} boxShadow={'base'}>
         <Stack
           justifyContent={'center'}
           alignItems={'center'}
@@ -86,11 +79,12 @@ function Verification() {
               fontSize={'24px'}
               marginBottom={'40px'}
             >
-              SET PASSWORD
+              RESET PASSWORD
             </Text>
             <Box position="relative" margin={'25px 0'}>
               <Text width={'400px'} color={'black'}>
-                Silahkan masukan password untuk akun anda dibawah ini.
+                Silahkan masukan email anda dibawah ini. Kami akan mengirimkan
+                informasi lanjut melalui email.
               </Text>
             </Box>
             <Box position="relative" margin={'20px 0'}>
@@ -98,26 +92,25 @@ function Verification() {
             </Box>
             <form onSubmit={formik.handleSubmit}>
               <FormControl
-                isInvalid={formik.touched.password && formik.errors.password}
+                isInvalid={formik.touched.email && formik.errors.email}
                 marginBottom={'20px'}
               >
                 <FormLabel
-                  htmlFor="password"
+                  htmlFor="email"
                   color={'black'}
                   fontSize={'14px'}
                   mb={'2'}
                   fontWeight={'bold'}
                 >
-                  Password
+                  Email Address
                 </FormLabel>
                 <InputGroup marginBottom={'8px'}>
                   <Input
-                    type={showPassword ? 'text' : 'password'}
-                    name="password"
-                    value={formik.values.password}
+                    name="email"
+                    placeholder="Enter your email address"
+                    type="email"
+                    value={formik.values.email}
                     onChange={formik.handleChange}
-                    required
-                    placeholder="enter password"
                     _placeholder={{ color: '#707070' }}
                     height={'50px'}
                     bg={'#EEEDED'}
@@ -132,7 +125,7 @@ function Verification() {
                       height={'64px'}
                     >
                       <Icon
-                        as={LockClosedIcon}
+                        as={EnvelopeIcon}
                         boxSize={'20px'}
                         margin={'auto'}
                         position={'relative'}
@@ -140,104 +133,11 @@ function Verification() {
                       />
                     </Flex>
                   </InputLeftElement>
-                  <InputRightElement top={'5px'} width={'50px'}>
-                    <Button
-                      variant={'ghost'}
-                      onClick={() =>
-                        setShowPassword((showPassword) => !showPassword)
-                      }
-                      backgroundColor={'transparent'}
-                      height={'64px'}
-                      _hover={'none'}
-                      color={'#707070'}
-                    >
-                      {showPassword ? (
-                        <Icon as={EyeIcon} boxSize={'24px'} />
-                      ) : (
-                        <Icon as={EyeSlashIcon} boxSize={'24px'} />
-                      )}
-                    </Button>
-                  </InputRightElement>
                 </InputGroup>
-                {formik.touched.password && formik.errors.password && (
-                  <FormErrorMessage>{formik.errors.password}</FormErrorMessage>
+                {formik.touched.email && formik.errors.email && (
+                  <FormErrorMessage>{formik.errors.email}</FormErrorMessage>
                 )}
               </FormControl>
-
-              <FormControl
-                isInvalid={
-                  formik.touched.confirmationPassword &&
-                  formik.errors.confirmationPassword
-                }
-                marginBottom={'20px'}
-              >
-                <FormLabel
-                  htmlFor="password"
-                  color={'black'}
-                  fontSize={'14px'}
-                  mb={'2'}
-                  fontWeight={'bold'}
-                >
-                  Password Confirmation
-                </FormLabel>
-                <InputGroup marginBottom={'8px'}>
-                  <Input
-                    type={showPasswordConfirmation ? 'text' : 'password'}
-                    name="confirmationPassword"
-                    placeholder="Password confirmation"
-                    onChange={formik.handleChange}
-                    _placeholder={{ color: '#707070' }}
-                    height={'50px'}
-                    bg={'#EEEDED'}
-                    color={'#707070'}
-                    fontSize={'16px'}
-                    borderRadius={'12px'}
-                  />
-                  <InputLeftElement top={'5px'} width={'50px'}>
-                    <Flex
-                      justifyContent={'center'}
-                      alignItems={'center'}
-                      height={'64px'}
-                    >
-                      <Icon
-                        as={LockClosedIcon}
-                        boxSize={'20px'}
-                        margin={'auto'}
-                        position={'relative'}
-                        textColor={'brand.grey350'}
-                      />
-                    </Flex>
-                  </InputLeftElement>
-                  <InputRightElement top={'5px'} width={'50px'}>
-                    <Button
-                      variant={'ghost'}
-                      onClick={() =>
-                        setShowPasswordConfirmation(
-                          (showPasswordConfirmation) =>
-                            !showPasswordConfirmation,
-                        )
-                      }
-                      backgroundColor={'transparent'}
-                      height={'64px'}
-                      _hover={'none'}
-                      color={'#707070'}
-                    >
-                      {showPasswordConfirmation ? (
-                        <Icon as={EyeIcon} boxSize={'24px'} />
-                      ) : (
-                        <Icon as={EyeSlashIcon} boxSize={'24px'} />
-                      )}
-                    </Button>
-                  </InputRightElement>
-                </InputGroup>
-                {formik.touched.confirmationPassword &&
-                  formik.errors.confirmationPassword && (
-                    <FormErrorMessage>
-                      {formik.errors.confirmationPassword}
-                    </FormErrorMessage>
-                  )}
-              </FormControl>
-
               {loading ? (
                 <Button
                   width={'100%'}
@@ -274,7 +174,7 @@ function Verification() {
                   _active={{ opacity: '70%' }}
                   type="submit"
                 >
-                  CONFIRM
+                  RESET PASSWORD
                 </Button>
               )}
             </form>
@@ -307,4 +207,4 @@ function Verification() {
   );
 }
 
-export default Verification;
+export default RequestPasswordReset;

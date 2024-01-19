@@ -1,4 +1,5 @@
 import User from '../models/users.model';
+import ResetToken from '../models/resetToken.model';
 import { Op } from 'sequelize';
 
 // REGISTRATION
@@ -45,7 +46,7 @@ export const findUserQuery = async ({ email = null, username = null }) => {
 export const emailVerificationQuery = async (email, password) => {
   try {
     await User.update(
-      { isVerified: true, password },
+      { is_verified: true, password },
       { where: { email: email } },
     );
   } catch (err) {
@@ -60,6 +61,80 @@ export const verifiedUserQuery = async (email) => {
       where: {
         email: email,
         is_verified: true,
+      },
+    });
+  } catch (err) {
+    throw err;
+  }
+};
+
+export const keepLoginQuery = async (id) => {
+  try {
+    const res = await User.findByPk(id, {
+      attributes: {
+        exclude: ['password'],
+      },
+    });
+
+    return res;
+  } catch (err) {
+    throw err;
+  }
+};
+
+// REQUEST RESET PASSWORD ( KETIKA LOGIN )
+export const forgotPasswordQuery = async (email, token) => {
+  try {
+    const user = await User.findOne({
+      where: { email: email },
+    });
+
+    if (user) {
+      const userId = user.user_id;
+      await ResetToken.create(
+        {
+          token: token,
+          user_id: userId,
+          isUsed: false,
+        },
+        { where: { userId: userId } },
+      );
+    } else {
+      console.log('User not found');
+    }
+  } catch (err) {
+    throw err;
+  }
+};
+
+export const resetPasswordQuery = async (email, password, token) => {
+  try {
+    await User.update({ password }, { where: { email: email } });
+
+    const user = await User.findOne({
+      where: { email: email },
+    });
+
+    if (user) {
+      const userId = user.user_id;
+      await ResetToken.update(
+        { token, isUsed: true },
+        { where: { user_id: userId } },
+      );
+    } else {
+      console.log('User not found');
+    }
+  } catch (err) {
+    throw err;
+  }
+};
+
+export const checkTokenUsageQuery = async (token) => {
+  try {
+    await ResetToken.findOne({
+      where: {
+        token: token,
+        isUsed: true,
       },
     });
   } catch (err) {

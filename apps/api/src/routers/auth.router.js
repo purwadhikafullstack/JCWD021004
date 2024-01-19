@@ -2,6 +2,10 @@ import { Router } from 'express';
 import {
   registerController,
   emailVerificationController,
+  loginController,
+  forgotPasswordController,
+  keepLoginController,
+  resetPasswordController,
 } from '../controllers/auth.controller';
 import { validator } from '../middleware/validator.middleware';
 import { verifyToken } from '../middleware/auth.middleware';
@@ -21,8 +25,14 @@ authRouter.post(
   validator(validations),
   registerController,
 );
+authRouter.post('/login', loginController);
+authRouter.post('/request-password-reset', forgotPasswordController);
+
+// GET
+authRouter.get('/keep-login', verifyToken, keepLoginController);
 
 // PUT
 authRouter.put('/email-verification', emailVerificationController);
+authRouter.put('/reset-password', resetPasswordController);
 
 export { authRouter };

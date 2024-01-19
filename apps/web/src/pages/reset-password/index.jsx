@@ -22,12 +22,14 @@ import {
   EyeIcon,
 } from '@heroicons/react/24/outline';
 import { useFormik } from 'formik';
-import { verification } from './service/EditUser';
-import { PasswordSchema } from './service/Validation';
+import { verification } from './services/EditUser';
+import { PasswordSchema } from './services/Validation';
 import { useState } from 'react';
-import { SuccessModal, ErrorModal } from './service/PopUpModal';
+import { SuccessModal } from './services/PopUpModal';
+import { ErrorModal } from './services/PopUpModal';
 import { BeatLoader } from 'react-spinners';
-function Verification() {
+
+function ResetPassword() {
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirmation, setShowPasswordConfirmation] =
     useState(false);
@@ -86,11 +88,11 @@ function Verification() {
               fontSize={'24px'}
               marginBottom={'40px'}
             >
-              SET PASSWORD
+              RESET PASSWORD
             </Text>
             <Box position="relative" margin={'25px 0'}>
               <Text width={'400px'} color={'black'}>
-                Silahkan masukan password untuk akun anda dibawah ini.
+                Silahkan masukan password baru anda dibawah ini.
               </Text>
             </Box>
             <Box position="relative" margin={'20px 0'}>
@@ -108,7 +110,7 @@ function Verification() {
                   mb={'2'}
                   fontWeight={'bold'}
                 >
-                  Password
+                  New Password
                 </FormLabel>
                 <InputGroup marginBottom={'8px'}>
                   <Input
@@ -117,7 +119,7 @@ function Verification() {
                     value={formik.values.password}
                     onChange={formik.handleChange}
                     required
-                    placeholder="enter password"
+                    placeholder="Enter password"
                     _placeholder={{ color: '#707070' }}
                     height={'50px'}
                     bg={'#EEEDED'}
@@ -171,15 +173,6 @@ function Verification() {
                 }
                 marginBottom={'20px'}
               >
-                <FormLabel
-                  htmlFor="password"
-                  color={'black'}
-                  fontSize={'14px'}
-                  mb={'2'}
-                  fontWeight={'bold'}
-                >
-                  Password Confirmation
-                </FormLabel>
                 <InputGroup marginBottom={'8px'}>
                   <Input
                     type={showPasswordConfirmation ? 'text' : 'password'}
@@ -284,7 +277,7 @@ function Verification() {
             />
             <ErrorModal isOpen={isErrorModalOpen} onClose={closeErrorModal} />
 
-            <Box position="relative" margin={'25px 0'}>
+            <Box position="relative" margin={'20px 0'}>
               <Text width={'400px'} color={'black'}>
                 By signing in or creating an account, you agree with our{' '}
                 <span style={{ color: '#006BE4' }}>Terms & Conditions</span> and{' '}
@@ -307,4 +300,4 @@ function Verification() {
   );
 }
 
-export default Verification;
+export default ResetPassword;
