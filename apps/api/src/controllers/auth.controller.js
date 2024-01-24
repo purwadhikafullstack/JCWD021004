@@ -66,9 +66,9 @@ export const loginController = async (req, res) => {
 
 export const keepLoginController = async (req, res) => {
   try {
-    const { id } = req.user;
+    const { user_id } = req.user;
 
-    const result = await keepLoginService(id);
+    const result = await keepLoginService(user_id);
 
     return res.status(200).json({
       message: 'Success',

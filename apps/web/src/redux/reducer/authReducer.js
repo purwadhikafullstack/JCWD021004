@@ -3,7 +3,7 @@ import { toast } from 'react-toastify';
 import axios from 'axios';
 
 const initialState = {
-  user: {
+  users: {
     user_id: null,
     username: '',
     email: '',
@@ -22,7 +22,7 @@ export const AuthReducer = createSlice({
       const { user_id, username, email, role_id, is_verified, avatar } =
         action.payload;
 
-      state.user = {
+      state.users = {
         user_id,
         username,
         email,
@@ -89,7 +89,40 @@ export const keepLogin = () => {
   };
 };
 
-export const { loginSuccess, logoutSuccess, setUser, keepLoginSuccess } =
-  AuthReducer.actions;
+export const editUsername = (user_id, username) => {
+  return async (dispatch) => {
+    try {
+      const res = await axios.patch(
+        `http://localhost:8000/api/user/update-username/${user_id}`,
+        {
+          username: username,
+        },
+      );
+
+      console.log('ini respond dari api ', res);
+
+      // Perbarui nama pengguna di state
+      dispatch(setUser(res?.data?.data?.user));
+
+      // Opsional: Anda dapat mengirimkan aksi tambahan jika diperlukan
+      dispatch(editUsernameSuccess());
+
+      // Opsional: Tampilkan pesan sukses
+      toast.success('Username updated successfully');
+    } catch (err) {
+      // Tampilkan pesan kesalahan
+      toast.error('Error updating username. Please try again.');
+      console.error(err?.response?.data);
+    }
+  };
+};
+
+export const {
+  loginSuccess,
+  logoutSuccess,
+  setUser,
+  keepLoginSuccess,
+  editUsernameSuccess,
+} = AuthReducer.actions;
 
 export default AuthReducer.reducer;

@@ -6,6 +6,7 @@ import {
   keepLoginQuery,
   forgotPasswordQuery,
   resetPasswordQuery,
+  checkTokenUsageQuery,
 } from '../queries/auth.queries';
 import bcrypt from 'bcrypt';
 import jwt, { Secret } from 'jsonwebtoken';

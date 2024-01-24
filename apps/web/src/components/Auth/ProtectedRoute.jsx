@@ -7,6 +7,6 @@ export const LoggedInRoute = ({ children }) => {
   if (check) {
     return <>{children}</>;
   } else if (!check) {
-    return <Navigate to="/signin" />;
+    return <Navigate to="/signin-screen" />;
   }
 };

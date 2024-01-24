@@ -1,5 +1,4 @@
 import {
-  AbsoluteCenter,
   Box,
   Button,
   Flex,
@@ -22,18 +21,18 @@ import {
   EyeSlashIcon,
 } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
-import { Google } from '../../assets/Icons/Icons';
 import { useFormik } from 'formik';
 import { useDispatch } from 'react-redux';
-import { login } from '../../redux/reducer/authReducer';
+import { useNavigate } from 'react-router-dom';
+import { login } from '../../../redux/reducer/authReducer';
 import { useState } from 'react';
-import { signInWithGoogle } from '../../firebase';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-function Signin({ setOpenTab }) {
+function SigninUser() {
   const [showPassword, setShowPassword] = useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
@@ -43,39 +42,37 @@ function Signin({ setOpenTab }) {
     onSubmit: (values, { resetForm }) => {
       dispatch(login(values.email, values.password));
       resetForm({ values: { email: '', password: '' } });
+      navigate('/profile');
     },
   });
 
-  const onLoginWithGoogle = async () => {
-    try {
-      const result = await signInWithGoogle();
-      if (result === 'signin with google success') {
-        setOpenTab(3);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   return (
     <>
-      <Center height={'85vh'} boxShadow={'base'}>
+      <Center height={'85vh'} marginTop={'40px'}>
         <Stack
           justifyContent={'center'}
           alignItems={'center'}
           alignContent={'center'}
           margin={'50'}
+          padding={'35px'}
+          boxShadow={'base'}
+          width={'500px'}
         >
           <Box width={'400px'}>
             <Text
               fontWeight={'800'}
               color={'brand.lightred'}
               textAlign={'center'}
-              fontSize={'24px'}
+              fontSize={'28px'}
               marginBottom={'40px'}
             >
-              SIGN IN
+              USER
             </Text>
+            <Box position="relative" margin={'25px 0'}>
+              <Text width={'400px'} color={'black'}>
+                Silahkan signin sebagai user.
+              </Text>
+            </Box>
             <form onSubmit={formik.handleSubmit}>
               <FormControl
                 isInvalid={formik.touched.email && formik.errors.email}
@@ -209,25 +206,6 @@ function Signin({ setOpenTab }) {
               </Link>
             </form>
 
-            <Box position="relative" margin={'20px 0'}>
-              <Divider border={'1px solid #D9D9D9'} />
-              <AbsoluteCenter bg="white" width={'50px'} color={'black'}>
-                or
-              </AbsoluteCenter>
-            </Box>
-            <Stack>
-              <Button
-                leftIcon={<Icon as={Google} boxSize={8} />}
-                background="#EEEDED"
-                variant="solid"
-                color="black"
-                height={'50px'}
-                borderRadius={'12px'}
-                onClick={onLoginWithGoogle}
-              >
-                Continue with Google
-              </Button>
-            </Stack>
             <Box position="relative" margin={'25px 0'}>
               <Divider border={'1px solid #D9D9D9'} />
             </Box>
@@ -255,4 +233,4 @@ function Signin({ setOpenTab }) {
   );
 }
 
-export default Signin;
+export default SigninUser;

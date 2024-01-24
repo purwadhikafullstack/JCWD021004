@@ -77,12 +77,15 @@ function Signup({ setOpenTab }) {
 
   return (
     <>
-      <Center height={'85vh'} boxShadow={'base'}>
+      <Center height={'85vh'} marginTop={'40px'}>
         <Stack
           justifyContent={'center'}
           alignItems={'center'}
           alignContent={'center'}
           margin={'50'}
+          padding={'35px'}
+          boxShadow={'base'}
+          width={'500px'}
         >
           <Box width={'400px'}>
             <Text

@@ -64,12 +64,15 @@ function RequestPasswordReset() {
   });
   return (
     <>
-      <Center height={'80vh'} boxShadow={'base'}>
+      <Center height={'85vh'} marginTop={'40px'}>
         <Stack
           justifyContent={'center'}
           alignItems={'center'}
           alignContent={'center'}
           margin={'50'}
+          padding={'35px'}
+          boxShadow={'base'}
+          width={'500px'}
         >
           <Box width={'400px'}>
             <Text
@@ -87,7 +90,7 @@ function RequestPasswordReset() {
                 informasi lanjut melalui email.
               </Text>
             </Box>
-            <Box position="relative" margin={'20px 0'}>
+            <Box position="relative" marginBottom={'40px'}>
               <Divider border={'1px solid #D9D9D9'} />
             </Box>
             <form onSubmit={formik.handleSubmit}>
@@ -168,13 +171,14 @@ function RequestPasswordReset() {
                   borderRadius={'12px'}
                   fontSize={'18px'}
                   fontWeight={'700'}
+                  marginBottom={'40px'}
                   color={'white'}
                   bg={'brand.lightred'}
                   _hover={{ bg: '#013B94' }}
                   _active={{ opacity: '70%' }}
                   type="submit"
                 >
-                  RESET PASSWORD
+                  SEND EMAIL
                 </Button>
               )}
             </form>
