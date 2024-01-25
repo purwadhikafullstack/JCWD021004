@@ -41,6 +41,9 @@ export const AuthReducer = createSlice({
     keepLoginSuccess: (state) => {
       state.isLogin = true;
     },
+    updateUsername: (state, action) => {
+      state.users.username = action.payload.username;
+    },
   },
 });
 
@@ -59,7 +62,6 @@ export const login = (email, password) => {
       toast.success('Login success');
     } catch (err) {
       toast.error('Error logging in. Please check your credentials.');
-      alert(err?.response?.data);
     }
   };
 };
@@ -99,20 +101,15 @@ export const editUsername = (user_id, username) => {
         },
       );
 
-      console.log('ini respond dari api ', res);
-
       // Perbarui nama pengguna di state
-      dispatch(setUser(res?.data?.data?.user));
-
-      // Opsional: Anda dapat mengirimkan aksi tambahan jika diperlukan
-      dispatch(editUsernameSuccess());
+      dispatch(updateUsername({ username: res?.data?.data }));
 
       // Opsional: Tampilkan pesan sukses
       toast.success('Username updated successfully');
     } catch (err) {
       // Tampilkan pesan kesalahan
       toast.error('Error updating username. Please try again.');
-      console.error(err?.response?.data);
+      console.log(err);
     }
   };
 };
@@ -123,6 +120,7 @@ export const {
   setUser,
   keepLoginSuccess,
   editUsernameSuccess,
+  updateUsername,
 } = AuthReducer.actions;
 
 export default AuthReducer.reducer;

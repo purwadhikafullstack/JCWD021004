@@ -10,7 +10,7 @@ import {
 } from '@chakra-ui/react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Image1 from '../../assets/images/signin/Image1.png';
 
 function SigninScreen() {
@@ -81,7 +81,18 @@ function SigninScreen() {
               Log in as Tenant{' '}
             </Button>
           </Box>
-
+          <Text
+            display={'flex'}
+            fontSize={'14px'}
+            mt={'10px'}
+            mb={'20px'}
+            color={'black'}
+          >
+            Belum Punya Akun?
+            <Link to="/signup" style={{ marginLeft: '5px', color: '#1A72DD' }}>
+              Register
+            </Link>
+          </Text>
           <Box position="relative" margin={'27px 0'}>
             <Text color={'black'}>All rights reserved.</Text>
             <Text color={'black'}>Copyright (2023-2024) - Relaxin.com™ </Text>

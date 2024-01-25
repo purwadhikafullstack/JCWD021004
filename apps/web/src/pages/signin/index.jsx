@@ -23,17 +23,14 @@ import {
 import { Link } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { useDispatch } from 'react-redux';
-import { Navigate } from 'react-router-dom';
-import { login } from '../../../redux/reducer/authReducer';
+import { login } from '../../redux/reducer/authReducer';
 import { useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useSelector } from 'react-redux';
 
-function SigninUser() {
+function Signin({ setOpenTab }) {
   const [showPassword, setShowPassword] = useState(false);
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.AuthReducer.users);
 
   const formik = useFormik({
     initialValues: {
@@ -46,13 +43,8 @@ function SigninUser() {
     },
   });
 
-  if (user.username) {
-    return <Navigate to="/" replace="true" />;
-  }
-
   return (
     <>
-      <ToastContainer />
       <Center height={'85vh'} marginTop={'40px'}>
         <Stack
           justifyContent={'center'}
@@ -68,16 +60,11 @@ function SigninUser() {
               fontWeight={'800'}
               color={'brand.lightred'}
               textAlign={'center'}
-              fontSize={'28px'}
+              fontSize={'24px'}
               marginBottom={'40px'}
             >
-              USER
+              SIGN IN
             </Text>
-            <Box position="relative" margin={'25px 0'}>
-              <Text width={'400px'} color={'black'}>
-                Silahkan signin sebagai user.
-              </Text>
-            </Box>
             <form onSubmit={formik.handleSubmit}>
               <FormControl
                 isInvalid={formik.touched.email && formik.errors.email}
@@ -233,8 +220,9 @@ function SigninUser() {
           </Box>
         </Stack>
       </Center>
+      <ToastContainer />
     </>
   );
 }
 
-export default SigninUser;
+export default Signin;

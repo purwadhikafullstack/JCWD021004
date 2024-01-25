@@ -19,7 +19,7 @@ export const SuccessModal = ({ isOpen, onClose }) => {
           </ModalHeader>
           <ModalBody textAlign={'center'} color={'black'} fontSize={'14px'}>
             Your email has been succesfully verified! Now you can dive into our
-            latest collection!
+            latest collection!. Please log in using your data earlier!
           </ModalBody>
 
           <ModalFooter>

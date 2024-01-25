@@ -36,6 +36,9 @@ export const init = (sequelize) => {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
+      avatar: {
+        type: DataTypes.STRING,
+      },
       createdAt: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,

@@ -18,7 +18,8 @@ export const SuccessModal = ({ isOpen, onClose }) => {
             Success!
           </ModalHeader>
           <ModalBody textAlign={'center'} color={'black'} fontSize={'14px'}>
-            Your password has been reset successfully.
+            Your password has been reset successfully. Please try logging in
+            again using your new password!
           </ModalBody>
 
           <ModalFooter>
