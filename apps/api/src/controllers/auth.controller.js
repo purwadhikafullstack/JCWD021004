@@ -5,6 +5,7 @@ import {
   keepLoginService,
   forgotPasswordService,
   resetPasswordService,
+  GoogleloginService,
 } from '../services/auth.services';
 
 // REGISTRATION
@@ -46,6 +47,22 @@ export const emailVerificationController = async (req, res) => {
     return res.status(500).json({
       message: err.message,
     });
+  }
+};
+
+export const googleLoginController = async (req, res) => {
+  try {
+    const { username, email, avatar } = req.body;
+
+    const result = await GoogleloginService(username, email, avatar);
+
+    return res.status(200).json({
+      message: 'Login Success',
+      data: result,
+    });
+  } catch (err) {
+    console.log(err.message);
+    return res.status(500).send(err.message);
   }
 };
 

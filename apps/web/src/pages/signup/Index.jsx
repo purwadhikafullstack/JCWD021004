@@ -14,6 +14,7 @@ import {
   useDisclosure,
   Icon,
 } from '@chakra-ui/react';
+import { Navigate } from 'react-router-dom';
 import { Google } from '../../assets/Icons/Icons';
 import { useFormik } from 'formik';
 import { register } from './services/CreateUser';
@@ -22,8 +23,12 @@ import { BeatLoader } from 'react-spinners';
 import { useState } from 'react';
 import { SignUpScheme } from './services/Validation';
 import { signInWithGoogle } from '../../firebase';
+import { useDispatch, useSelector } from 'react-redux';
+import { Googlelogin } from '../../redux/reducer/authReducer';
 
-function Signup({ setOpenTab }) {
+function Signup() {
+  const isLogin = useSelector((state) => state.AuthReducer.isLogin);
+  const dispatch = useDispatch();
   const {
     isOpen: isSuccessModalOpen,
     onOpen: openSuccessModal,
@@ -67,13 +72,27 @@ function Signup({ setOpenTab }) {
   const onLoginWithGoogle = async () => {
     try {
       const result = await signInWithGoogle();
-      if (result === 'signin with google success') {
-        setOpenTab(3);
+      console.log('ini result', result);
+      if (result) {
+        dispatch(
+          Googlelogin(
+            result.username,
+            result.email,
+            result.avatar,
+            setLoading,
+            openSuccessModal,
+            openErrorModal,
+          ),
+        );
       }
     } catch (error) {
       console.log(error);
     }
   };
+
+  if (isLogin) {
+    return <Navigate to={'/'} replace={true} />;
+  }
 
   return (
     <>

@@ -28,7 +28,7 @@ import { useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-function Signin({ setOpenTab }) {
+function Signin() {
   const [showPassword, setShowPassword] = useState(false);
   const dispatch = useDispatch();
 

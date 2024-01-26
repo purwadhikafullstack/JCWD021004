@@ -6,6 +6,7 @@ import {
   keepLoginQuery,
   forgotPasswordQuery,
   resetPasswordQuery,
+  registerGoogleLoginQuery,
   checkTokenUsageQuery,
 } from '../queries/auth.queries';
 import bcrypt from 'bcrypt';
@@ -90,6 +91,30 @@ export const emailVerificationService = async (token, password) => {
     return {
       message: 'Email is now verified and password is set succesfully.',
     };
+  } catch (err) {
+    throw err;
+  }
+};
+
+export const GoogleloginService = async (username, email, avatar) => {
+  try {
+    let check = await findUserQuery({ email });
+    if (!check) {
+      check = await registerGoogleLoginQuery(username, email, avatar);
+    }
+
+    let payload = {
+      user_id: check.user_id,
+      email: check.email,
+      username: check.username,
+      role_id: check.role_id,
+      avatar: check.avatar,
+    };
+
+    const token = jwt.sign(payload, process.env.JWT_SECRET_KEY, {
+      expiresIn: '1hr',
+    });
+    return { user: check, token };
   } catch (err) {
     throw err;
   }

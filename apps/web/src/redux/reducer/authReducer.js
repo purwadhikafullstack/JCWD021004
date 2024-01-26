@@ -66,6 +66,37 @@ export const login = (email, password) => {
   };
 };
 
+export const Googlelogin = (
+  username,
+  email,
+  avatar,
+  setLoading,
+  openSuccessModal,
+  openErrorModal,
+) => {
+  return async (dispatch) => {
+    try {
+      const res = await axios.post('http://localhost:8000/api/auth/google', {
+        username,
+        email,
+        avatar,
+      });
+
+      console.log('ini respond dari api', res);
+
+      localStorage.setItem('token', res?.data?.data?.token);
+      dispatch(setUser(res?.data?.data?.user));
+      openSuccessModal();
+      setLoading(false);
+      dispatch(loginSuccess());
+    } catch (err) {
+      alert(err?.response?.data.message);
+      openErrorModal();
+      throw err;
+    }
+  };
+};
+
 export const keepLogin = () => {
   return async (dispatch) => {
     try {

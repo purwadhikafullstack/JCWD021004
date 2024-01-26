@@ -15,11 +15,15 @@ import {
   PopoverContent,
   HStack,
   Flex,
+  Icon,
+  Stack,
+  Checkbox,
 } from '@chakra-ui/react';
 import { CalendarIcon } from '@chakra-ui/icons';
 import { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { FaCity } from 'react-icons/fa';
 // import { useSelector } from 'react-redux';
 
 function Home() {
@@ -27,10 +31,20 @@ function Home() {
   const [endDate, setEndDate] = useState(null);
   // const { user } = useSelector((state) => state.AuthReducer.users);
 
+  const updateButtonText = () => {
+    if (startDate && endDate) {
+      return `${startDate.toLocaleDateString()} - ${endDate.toLocaleDateString()}`;
+    } else if (startDate) {
+      return `Check in: ${startDate.toLocaleDateString()}`;
+    } else {
+      return 'Check in Date - Check out Date';
+    }
+  };
+
   return (
     <>
       <Navbar />
-      <Box>
+      <Box height={'100vh'}>
         <Box id="welcoming-user" bg={'#013B94'} height={'30vh'}>
           <Box
             marginX={'70px'}
@@ -72,7 +86,10 @@ function Home() {
                   height={'55px'}
                   width={'330px'}
                 >
-                  Select City
+                  <HStack justifyContent="center">
+                    <Icon as={FaCity} boxSize={4} />
+                    <span>Select City</span>
+                  </HStack>
                 </MenuButton>
                 <MenuList w="80" color={'black'}>
                   <MenuItem>New York</MenuItem>
@@ -99,11 +116,10 @@ function Home() {
                       w={4}
                       transform="-translate-x-1"
                     />
-                    Check in Date - Check out Date
+                    {updateButtonText()}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent align="start" p={0}>
-                  {/* Assuming Calendar is a Chakra UI component or you have your own Calendar component */}
                   <HStack>
                     <DatePicker
                       selected={startDate}
@@ -111,7 +127,7 @@ function Home() {
                       startDate={startDate}
                       endDate={endDate}
                       selectsRange
-                      inline // Jika ingin menampilkan kalender secara langsung
+                      inline
                     />
                     <DatePicker
                       selected={endDate}
@@ -119,7 +135,7 @@ function Home() {
                       startDate={startDate}
                       endDate={endDate}
                       selectsRange
-                      inline // Jika ingin menampilkan kalender secara langsung
+                      inline
                     />
                   </HStack>
                 </PopoverContent>
@@ -152,11 +168,47 @@ function Home() {
                 Search
               </Button>
             </Flex>
+            <Stack spacing={5} direction="row" mt={'15px'}>
+              <Checkbox
+                colorScheme="blue"
+                defaultChecked
+                fontSize="sm"
+                color={'black'}
+              >
+                I’m looking for an entire home or apartment
+              </Checkbox>
+              <Checkbox
+                colorScheme="blue"
+                defaultChecked
+                fontSize="sm"
+                color={'black'}
+              >
+                I’m looking for flights
+              </Checkbox>
+            </Stack>
           </Box>
         </Box>
-      </Box>
-      <Box>
-        <Box id="body-constraint"></Box>
+
+        <Box>
+          <Box id="body-constraint" mt={'10px'}>
+            <Box paddingLeft={'40px'} height={'30vh'}>
+              <VStack align={'start'}>
+                <Text
+                  color={'black'}
+                  fontWeight={'800'}
+                  fontSize={'28px'}
+                  mb={'7px'}
+                >
+                  Offers
+                </Text>
+                <Text color={'black'} fontSize={'16px'}>
+                  Promotions, deals, and special offers for you
+                </Text>
+              </VStack>
+            </Box>
+            <Box paddingLeft={'40px'}></Box>
+          </Box>
+        </Box>
       </Box>
       <Footer />
     </>

@@ -8,12 +8,13 @@ import {
 import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyAPUZPof7TJGRN9xNvScXEyh5JP0D-xk4I',
-  authDomain: 'final-project-fffa1.firebaseapp.com',
-  projectId: 'final-project-fffa1',
-  storageBucket: 'final-project-fffa1.appspot.com',
-  messagingSenderId: '122663545638',
-  appId: '1:122663545638:web:6783010a89eed2b900afe7',
+  apiKey: 'AIzaSyC1KYD8OKyVQEHnVM7AiYI8XVPfbEU1z3U',
+  authDomain: 'final-project-firebase-644d3.firebaseapp.com',
+  projectId: 'final-project-firebase-644d3',
+  storageBucket: 'final-project-firebase-644d3.appspot.com',
+  messagingSenderId: '8594843169',
+  appId: '1:8594843169:web:256a38c7adb16d22852560',
+  measurementId: 'G-7NH8D8T81L',
 };
 
 // Initialize Firebase
@@ -27,11 +28,12 @@ const signInWithGoogle = async () => {
   try {
     const res = await signInWithPopup(auth, googleProvider);
     const user = res.user;
+
     console.log(user);
 
-    return 'signin with google success';
+    return user;
   } catch (err) {
-    console.error(err);
+    console.log(err);
     alert(err.message);
   }
 };

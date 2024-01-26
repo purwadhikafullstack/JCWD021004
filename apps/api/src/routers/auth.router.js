@@ -6,6 +6,7 @@ import {
   forgotPasswordController,
   keepLoginController,
   resetPasswordController,
+  googleLoginController,
 } from '../controllers/auth.controller';
 import { validator } from '../middleware/validator.middleware';
 import { verifyToken } from '../middleware/auth.middleware';
@@ -27,6 +28,7 @@ authRouter.post(
 );
 authRouter.post('/login', loginController);
 authRouter.post('/request-password-reset', forgotPasswordController);
+authRouter.post('/google', googleLoginController);
 
 // GET
 authRouter.get('/keep-login', verifyToken, keepLoginController);
