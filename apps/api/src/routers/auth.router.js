@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import {
   registerController,
+  registerTenantController,
   emailVerificationController,
   loginController,
   forgotPasswordController,
@@ -20,11 +21,24 @@ const validations = [
   body('username').notEmpty().withMessage('Username cannot be emptied'),
 ];
 
+const emailValidation = [
+  body('email')
+    .notEmpty()
+    .withMessage('Email cannot be empty')
+    .isEmail()
+    .withMessage('Invalid email format'),
+];
+
 // POST
 authRouter.post(
   '/user-registration',
   validator(validations),
   registerController,
+);
+authRouter.post(
+  '/tenant-registration',
+  validator(emailValidation),
+  registerTenantController,
 );
 authRouter.post('/login', loginController);
 authRouter.post('/request-password-reset', forgotPasswordController);

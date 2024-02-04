@@ -70,6 +70,7 @@ function Verification() {
       resetForm({ values: { password: '', confirmationPassword: '' } });
     },
   });
+
   return (
     <>
       <Center height={'85vh'} marginTop={'40px'}>

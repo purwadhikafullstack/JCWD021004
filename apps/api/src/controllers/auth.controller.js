@@ -1,5 +1,6 @@
 import {
   registerService,
+  registerTenantService,
   emailVerificationService,
   loginService,
   keepLoginService,
@@ -8,12 +9,31 @@ import {
   GoogleloginService,
 } from '../services/auth.services';
 
-// REGISTRATION
+// REGISTRATION USER
 export const registerController = async (req, res) => {
   try {
     const { email, username } = req.body;
 
     const result = await registerService(email, username);
+
+    return res.status(200).json({
+      message: 'Success',
+      data: result,
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      message: err.message,
+    });
+  }
+};
+
+// REGISTRATION TENANT
+export const registerTenantController = async (req, res) => {
+  try {
+    const { email, username, password } = req.body;
+
+    const result = await registerTenantService(email, username, password);
 
     return res.status(200).json({
       message: 'Success',

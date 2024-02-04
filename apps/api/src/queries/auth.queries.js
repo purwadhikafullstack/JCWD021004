@@ -24,6 +24,28 @@ export const registerQuery = async (email, username) => {
   }
 };
 
+// REGISTRATION TENANT
+export const registerTenantQuery = async (email, username, password) => {
+  const t = await User.sequelize.transaction();
+  try {
+    const res = await User.create(
+      {
+        email,
+        username,
+        password,
+        role_id: 2,
+        is_verified: true,
+      },
+      { transaction: t },
+    );
+    await t.commit();
+    return res;
+  } catch (err) {
+    await t.rollback();
+    throw err;
+  }
+};
+
 // FIND USER
 export const findUserQuery = async ({ email = null, username = null }) => {
   try {

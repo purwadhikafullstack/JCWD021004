@@ -10,6 +10,11 @@ import ResetPassword from './pages/reset-password/index';
 import Profile from './pages/profile/Index';
 import SigninScreen from './pages/signin-screen';
 import { LoggedInRoute } from './components/Auth/ProtectedRoute';
+import PropertyDetail from './pages/property-detail';
+import SignupTenant from './pages/signup-tenant';
+import SignDataTenant from './pages/sign-data-tenant';
+import PropertyList from './pages/property-list';
+import CreateProperty from './pages/create-property';
 
 function App() {
   return (
@@ -18,6 +23,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/signup-tenant" element={<SignupTenant />} />
+          <Route path="/signdata-tenant" element={<SignDataTenant />} />
           <Route path="/auth/email-verification" element={<Verification />} />
           <Route path="/signin-screen" element={<SigninScreen />} />
           <Route path="/signin-user" element={<SigninUser />} />
@@ -35,6 +42,9 @@ function App() {
               </LoggedInRoute>
             }
           />
+          <Route path="/create-property" element={<CreateProperty />} />
+          <Route path="/property-list" element={<PropertyList />} />
+          <Route path="/property-detail" element={<PropertyDetail />} />
         </Routes>
       </Auth>
     </>

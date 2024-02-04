@@ -5,6 +5,7 @@ function getQueryParam(param) {
   return urlParams.get(param);
 }
 const token = getQueryParam('token');
+
 export const verification = async (
   password,
   setLoading,

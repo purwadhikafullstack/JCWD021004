@@ -14,7 +14,7 @@ import {
   useDisclosure,
   Icon,
 } from '@chakra-ui/react';
-import { Navigate } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { Google } from '../../assets/Icons/Icons';
 import { useFormik } from 'formik';
 import { register } from './services/CreateUser';
@@ -229,6 +229,16 @@ function Signup() {
             />
             <ErrorModal isOpen={isErrorModalOpen} onClose={closeErrorModal} />
             {/* ... */}
+
+            <Text fontSize={'14px'} mt={'10px'} color={'black'}>
+              Go to login?
+              <Link
+                to="/signin-screen"
+                style={{ marginLeft: '5px', color: '#1A72DD' }}
+              >
+                Sign in
+              </Link>
+            </Text>
 
             <Box position="relative" margin={'32px 0'}>
               <Divider border={'1px solid #D9D9D9'} />
