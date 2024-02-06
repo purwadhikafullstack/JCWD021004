@@ -7,14 +7,15 @@ import {
   findCategoryController,
   findCityController,
 } from '../controllers/property.controller';
+import { verifyToken } from '../middleware/auth.middleware';
 const propertyRouter = Router();
 
 propertyRouter.get('/', getPropertyController);
 propertyRouter.get('/details/:id', getPropertyController);
-propertyRouter.post('/create', createPropertyController);
+propertyRouter.post('/create', verifyToken, createPropertyController);
 propertyRouter.patch('/:id', updatePropertyController);
 propertyRouter.delete('/:id', deletePropertyController);
-propertyRouter.get('/province', findCategoryController);
-propertyRouter.get('/city/:id', findCityController);
+propertyRouter.get('/property-category', findCategoryController);
+propertyRouter.get('/city', findCityController);
 
 export { propertyRouter };

@@ -6,26 +6,13 @@ import {
   VStack,
   Text,
   Button,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  HStack,
   Flex,
-  Icon,
-  Stack,
-  Checkbox,
+  Select,
   Grid,
   Heading,
 } from '@chakra-ui/react';
-import { CalendarIcon } from '@chakra-ui/icons';
-import { useState } from 'react';
-import DatePicker from 'react-datepicker';
+import { useEffect, useState } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
-import { FaCity } from 'react-icons/fa';
 import airport from '../../assets/images/home/airport.jpg';
 import vacation from '../../assets/images/home/vacation.jpg';
 import ubud from '../../assets/images/home/ubud.jpg';
@@ -33,22 +20,18 @@ import canggu from '../../assets/images/home/canggu.jpg';
 import jakarta from '../../assets/images/home/jakarta.jpg';
 import uluwatu from '../../assets/images/home/uluwatu.jpg';
 import sanur from '../../assets/images/home/sanur.jpg';
+import { getCity } from './services/ReadCity';
 // import { useSelector } from 'react-redux';
 
 function Home() {
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
   // const { user } = useSelector((state) => state.AuthReducer.users);
+  const [cities, setCities] = useState([]);
 
-  const updateButtonText = () => {
-    if (startDate && endDate) {
-      return `${startDate.toLocaleDateString()} - ${endDate.toLocaleDateString()}`;
-    } else if (startDate) {
-      return `Check in: ${startDate.toLocaleDateString()}`;
-    } else {
-      return 'Check in Date - Check out Date';
-    }
-  };
+  useEffect(() => {
+    getCity().then((data) => {
+      setCities(data);
+    });
+  }, []);
 
   return (
     <>
@@ -87,87 +70,27 @@ function Home() {
               padding={1.5}
               borderRadius={'5px'}
             >
-              <Menu>
-                <MenuButton
-                  as={Button}
-                  bg={'white'}
-                  color={'black'}
-                  height={'55px'}
-                  width={'330px'}
-                >
-                  <HStack justifyContent="center">
-                    <Icon as={FaCity} boxSize={4} />
-                    <span>Select City</span>
-                  </HStack>
-                </MenuButton>
-                <MenuList w="80" color={'black'}>
-                  <MenuItem>New York</MenuItem>
-                  <MenuItem>Los Angeles</MenuItem>
-                  <MenuItem>Chicago</MenuItem>
-                  <MenuItem>Houston</MenuItem>
-                  <MenuItem>Phoenix</MenuItem>
-                  <MenuItem>San Diego</MenuItem>
-                </MenuList>
-              </Menu>
-              <Popover>
-                <PopoverTrigger>
-                  <Button
-                    className="w-full justify-start text-left font-normal"
-                    bg={'white'}
-                    color={'black'}
-                    height={'55px'}
-                    width={'330px'}
-                    fontSize={'15px'}
-                  >
-                    <CalendarIcon
-                      mr={1}
-                      h={4}
-                      w={4}
-                      transform="-translate-x-1"
-                    />
-                    {updateButtonText()}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent align="start" p={0}>
-                  <HStack>
-                    <DatePicker
-                      selected={startDate}
-                      onChange={(date) => setStartDate(date)}
-                      startDate={startDate}
-                      endDate={endDate}
-                      selectsRange
-                      inline
-                    />
-                    <DatePicker
-                      selected={endDate}
-                      onChange={(date) => setEndDate(date)}
-                      startDate={startDate}
-                      endDate={endDate}
-                      selectsRange
-                      inline
-                    />
-                  </HStack>
-                </PopoverContent>
-              </Popover>
-              <Menu>
-                <MenuButton
-                  as={Button}
-                  bg={'white'}
-                  color={'black'}
-                  height={'55px'}
-                  width={'330px'}
-                >
-                  Number of People
-                </MenuButton>
-                <MenuList w="80" color={'black'}>
-                  <MenuItem>1</MenuItem>
-                  <MenuItem>2</MenuItem>
-                  <MenuItem>3</MenuItem>
-                  <MenuItem>4</MenuItem>
-                  <MenuItem>5</MenuItem>
-                  <MenuItem>6</MenuItem>
-                </MenuList>
-              </Menu>
+              <Select
+                name={'cityId'}
+                // value={selectedCity}
+                placeholder={'SELECT THE CITY'}
+                fontWeight="bold"
+                bg={'white'}
+                color={'black'}
+                height={'55px'}
+                width={'100%'}
+                // isDisabled={!citylist?.length}
+                // onChange={(e) => {
+                //   setSelectedCity(e.target.value);
+                //   formik.handleChange(e);
+                // }}
+              >
+                {cities?.map((city) => (
+                  <option key={city.city_id} value={city.city_id}>
+                    {city.name}
+                  </option>
+                ))}
+              </Select>
               <Button
                 bg={'brand.lightred'}
                 _hover={{ bg: '#013B94' }}
@@ -177,24 +100,6 @@ function Home() {
                 Search
               </Button>
             </Flex>
-            <Stack spacing={5} direction="row" mt={'15px'}>
-              <Checkbox
-                colorScheme="blue"
-                defaultChecked
-                fontSize="sm"
-                color={'black'}
-              >
-                I’m looking for an entire home or apartment
-              </Checkbox>
-              <Checkbox
-                colorScheme="blue"
-                defaultChecked
-                fontSize="sm"
-                color={'black'}
-              >
-                I’m looking for flights
-              </Checkbox>
-            </Stack>
           </Box>
         </Box>
 

@@ -6,7 +6,7 @@ import {
   updatePropertyQuery,
   findCategoryQuery,
   findCityQuery,
-} from '../queries/product.queries';
+} from '../queries/property.queries';
 
 export const getPropertyService = async (
   name,
@@ -39,21 +39,25 @@ export const getPropertyService = async (
 };
 
 export const createPropertyService = async (
-  name,
-  price,
+  propertyName,
+  selectedCategory,
   description,
-  productCategoryId,
+  address,
+  selectedCity,
+  id,
 ) => {
   try {
-    const check = await getPropertyByName({ name });
-    console.log('name', name);
-    if (check) throw new Error('Product with that name is already exist');
+    const check = await getPropertyByName({ propertyName });
+    console.log('name', propertyName);
+    if (check) throw new Error('Property with that name is already exist');
 
     const res = await createPropertyQuery(
-      name,
-      price,
+      propertyName,
+      selectedCategory,
       description,
-      productCategoryId,
+      address,
+      selectedCity,
+      id,
     );
     return res;
   } catch (err) {
@@ -106,9 +110,9 @@ export const findCategoryService = async () => {
   }
 };
 
-export const findCityService = async (id) => {
+export const findCityService = async () => {
   try {
-    const res = await findCityQuery(id);
+    const res = await findCityQuery();
     return res;
   } catch (err) {
     throw err;

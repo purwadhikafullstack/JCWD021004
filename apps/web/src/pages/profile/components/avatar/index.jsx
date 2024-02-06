@@ -14,7 +14,7 @@ import { useSelector } from 'react-redux';
 import { PhotoIcon } from '@heroicons/react/24/solid';
 
 function UploadAvatar() {
-  const user = useSelector((state) => state.AuthReducer.user);
+  const user = useSelector((state) => state.AuthReducer.users);
   const [fieldImage, setFieldImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const inputRef = useRef(null);
@@ -38,7 +38,7 @@ function UploadAvatar() {
       formData.append('avatar', fieldImage);
 
       const { data } = await axios.patch(
-        `${import.meta.env.VITE_API_URL}user/upload-avatar/${user.id}`,
+        `${import.meta.env.VITE_API_URL}user/upload-avatar/${user.user_id}`,
         formData,
       );
       alert(data?.message);

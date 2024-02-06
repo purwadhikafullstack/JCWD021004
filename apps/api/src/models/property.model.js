@@ -42,23 +42,10 @@ export const init = (sequelize) => {
       address: {
         type: DataTypes.STRING,
       },
-      province_id: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
-      created_at: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
-        allowNull: false,
-      },
-      updated_at: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
-        allowNull: false,
-      },
     },
     {
       sequelize,
+      timestamps: false,
       modelName: 'Property',
     },
   );

@@ -15,6 +15,7 @@ import SignupTenant from './pages/signup-tenant';
 import SignDataTenant from './pages/sign-data-tenant';
 import PropertyList from './pages/property-list';
 import CreateProperty from './pages/create-property';
+import PropertyManagement from './pages/property-management';
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
           <Route path="/create-property" element={<CreateProperty />} />
           <Route path="/property-list" element={<PropertyList />} />
           <Route path="/property-detail" element={<PropertyDetail />} />
+          <Route path="/property-management" element={<PropertyManagement />} />
         </Routes>
       </Auth>
     </>

@@ -27,8 +27,10 @@ import { PasswordSchema } from './service/Validation';
 import { useState } from 'react';
 import { SuccessModal, ErrorModal } from './service/PopUpModal';
 import { BeatLoader } from 'react-spinners';
+import { useNavigate } from 'react-router-dom';
 
 function Verification() {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirmation, setShowPasswordConfirmation] =
     useState(false);
@@ -63,6 +65,11 @@ function Verification() {
           openSuccessModal,
           openErrorModal,
         );
+
+        // Adding a delay of 5 seconds before navigating
+        setTimeout(() => {
+          navigate('/signin-user');
+        }, 3000);
       } catch (err) {
         console.log(err.message);
       }

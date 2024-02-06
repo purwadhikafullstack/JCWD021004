@@ -2,27 +2,37 @@ import axios from 'axios';
 
 export const property = async (
   propertyName,
-  propertyCategoryId,
+  selectedCategory,
   description,
   address,
-  cityId,
+  selectedCity,
   setLoading,
   openSuccessModal,
   openErrorModal,
 ) => {
+  const token = localStorage.getItem('token');
   try {
     setLoading(true);
-    await axios.post('http://localhost:8000/api/auth/tenant-registration', {
-      propertyName,
-      propertyCategoryId,
-      description,
-      address,
-      cityId,
-    });
+    await axios.post(
+      'http://localhost:8000/api/property/create',
+      {
+        propertyName,
+        selectedCategory,
+        description,
+        address,
+        selectedCity,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
     setLoading(false);
     openSuccessModal();
     console.log('success');
   } catch (err) {
+    console.log(err);
     setLoading(false);
     openErrorModal();
     console.log('ini errornya', err.message);

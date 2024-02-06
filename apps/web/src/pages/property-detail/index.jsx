@@ -1,7 +1,6 @@
 import {
   Badge,
   Box,
-  ButtonGroup,
   Button,
   Grid,
   Image,
@@ -33,11 +32,37 @@ import maps from '../../assets/images/home/Google-Images.jpeg';
 import { CalendarIcon } from '@chakra-ui/icons';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
+import NavbarDataProperty from './components/navbar-data';
 
 function PropertyDetail() {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
+  const overviewRef = useRef(null);
+  const aboutRef = useRef(null);
+  const facilitiesRef = useRef(null);
+  const priceRef = useRef(null);
+  const guestReviewsRef = useRef(null);
+
+  const handleOverviewClick = () => {
+    overviewRef.current.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const handleAboutClick = () => {
+    aboutRef.current.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const handleFacilitiesClick = () => {
+    facilitiesRef.current.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const handlePriceClick = () => {
+    priceRef.current.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const handleGuestReviewsClick = () => {
+    guestReviewsRef.current.scrollIntoView({ behavior: 'smooth' });
+  };
 
   const updateButtonText = () => {
     if (startDate && endDate) {
@@ -51,25 +76,15 @@ function PropertyDetail() {
 
   return (
     <>
-      <Navbar />
+      <Navbar ref={overviewRef} />
       <Box maxW="6xl" h={'200vh'} mx="auto" my={8}>
-        <Box
-          display="flex"
-          justifyContent="flex-start"
-          alignItems="flex-start"
-          mb={'10px'}
-        >
-          <ButtonGroup spacing={2}>
-            <Button bg="#ffdd00" color="black">
-              Overview
-            </Button>
-            <Button variant="ghost">Info & prices</Button>
-            <Button variant="ghost">Facilities</Button>
-            <Button variant="ghost">House rules</Button>
-            <Button variant="ghost">Guest reviews (365)</Button>
-          </ButtonGroup>
-        </Box>
-
+        <NavbarDataProperty
+          handleOverviewClick={handleOverviewClick}
+          handleAboutClick={handleAboutClick}
+          handleFacilitiesClick={handleFacilitiesClick}
+          handlePriceClick={handlePriceClick}
+          handleGuestReviewsClick={handleGuestReviewsClick}
+        />
         <Divider mb={'20px'} />
 
         <Grid templateColumns={['1fr', '1fr', '2fr 1fr']} gap={8}>
@@ -102,6 +117,7 @@ function PropertyDetail() {
             <Grid templateColumns="repeat(2, 1fr)" gap={4} mb={4}>
               {[1, 2, 3, 4].map((index) => (
                 <Image
+                  ref={aboutRef}
                   key={index}
                   alt={`Hotel image ${index}`}
                   borderRadius="lg"
@@ -175,6 +191,7 @@ function PropertyDetail() {
             </Box>
           </VStack>
           <Box
+            ref={facilitiesRef}
             fontSize="16px"
             mt={'7px'}
             color={'black'}
@@ -197,6 +214,7 @@ function PropertyDetail() {
           </Box>
         </Grid>
         <Box
+          ref={priceRef}
           maxW="1100px"
           mt={'40px'}
           p={[4, 6, 8]}

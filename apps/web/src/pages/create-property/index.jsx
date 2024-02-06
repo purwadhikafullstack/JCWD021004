@@ -28,22 +28,6 @@ function CreateProperty() {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [citylist, setCityList] = useState([]);
   const [selectedCity, setSelectedCity] = useState('');
-
-  useEffect(() => {
-    getCategory().then((data) => {
-      setCategoryList(data);
-    });
-  }, []);
-
-  useEffect(() => {
-    if (selectedCategory !== '') {
-      getCity(selectedCategory).then((data) => {
-        setCityList(data);
-        console.log(data);
-      });
-    }
-  }, [selectedCategory]);
-
   const {
     isOpen: isSuccessModalOpen,
     onOpen: openSuccessModal,
@@ -62,37 +46,52 @@ function CreateProperty() {
   };
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    getCategory().then((data) => {
+      setCategoryList(data);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (selectedCategory !== '') {
+      getCity(selectedCategory).then((data) => {
+        setCityList(data);
+        console.log(data);
+      });
+    }
+  }, [selectedCategory]);
+
   const formik = useFormik({
     initialValues: {
       propertyName: '',
-      propertyCategoryId: '',
+      selectedCategory: '',
       description: '',
       address: '',
-      cityId: '',
+      selectedCity: '',
     },
     validationSchema: SignUpScheme,
     onSubmit: async (values, { resetForm }) => {
       try {
         await property(
           values.propertyName,
-          values.propertyCategoryId,
+          selectedCategory,
           values.description,
           values.address,
-          values.cityId,
+          selectedCity,
           setLoading,
           openSuccessModal,
           openErrorModal,
         );
       } catch (err) {
-        console.log('gagal broh!');
+        console.log(err);
       }
       resetForm({
         values: {
           propertyName: '',
-          propertyCategory: '',
+          selectedCategory,
           description: '',
           address: '',
-          city: '',
+          selectedCity,
         },
       });
     },
@@ -176,7 +175,7 @@ function CreateProperty() {
                       Property Name
                     </FormLabel>
                     <Input
-                      name="property-name"
+                      name="propertyName"
                       placeholder="Enter property name"
                       value={formik.values.propertyName}
                       onChange={formik.handleChange}
@@ -191,23 +190,27 @@ function CreateProperty() {
                       )}
                   </FormControl>
                   <Box>
-                    <Text
+                    <FormLabel
                       htmlFor="property-category"
                       color={'black'}
                       fontWeight={'bold'}
                     >
                       Property Category
-                    </Text>
-                    <Select>
+                    </FormLabel>
+                    <Select
                       placeholder={'Select a Category'}
-                      bg={'black'}
-                      variant={'filled'}
                       color={'black'}
-                      isDisabled value={selectedCategory}
+                      variant={'filled'}
+                      isDisabled={!categoryList?.length}
+                      value={selectedCategory}
                       onChange={(e) => setSelectedCategory(e.target.value)}
+                    >
                       {categoryList?.map((category) => (
-                        <option key={category.id} value={category.id}>
-                          {category.name}
+                        <option
+                          key={category.category_id}
+                          value={category.category_id}
+                        >
+                          {category.category_name}
                         </option>
                       ))}
                     </Select>
@@ -250,7 +253,7 @@ function CreateProperty() {
                     color={'black'}
                     fontWeight={'bold'}
                   >
-                    Address
+                    Address (Ex : Street, Residence, Number of house)
                   </FormLabel>
                   <Input
                     name="address"
@@ -265,23 +268,23 @@ function CreateProperty() {
                   )}
                 </FormControl>
                 <Box mt={['3', '5']}>
-                  <Text htmlFor="city" color={'black'} fontWeight={'bold'}>
+                  <FormLabel htmlFor="city" color={'black'} fontWeight={'bold'}>
                     City
-                  </Text>
-                  <Select>
+                  </FormLabel>
+                  <Select
                     name={'cityId'}
                     value={selectedCity}
                     placeholder={'Select a City'}
-                    bg={'blue'}
                     color={'black'}
                     variant={'filled'}
-                    isDisabled onChange=
-                    {(e) => {
+                    isDisabled={!citylist?.length}
+                    onChange={(e) => {
                       setSelectedCity(e.target.value);
                       formik.handleChange(e);
                     }}
+                  >
                     {citylist?.map((city) => (
-                      <option key={city.id} value={city.id}>
+                      <option key={city.city_id} value={city.city_id}>
                         {city.name}
                       </option>
                     ))}

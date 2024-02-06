@@ -1,121 +1,10 @@
-import Product from '../models/product.model';
-import ProductCategory from '../models/productCategory.model';
 import { Op } from 'sequelize';
-import Size from '../models/size.model';
-import ProductImage from '../models/productImage.model';
-import Stock from '../models/stock.model';
-import Colour from '../models/colour.model';
+import Property from '../models/property.model';
+import City from '../models/city.model';
 import PropertyCategory from '../models/propertyCategory.model';
 
-export const getPropertyQuery = async (
-  name = null,
-  gender = null,
-  group = null,
-  category = null,
-  id = null,
-  sortBy = 'name',
-  orderBy = 'ASC',
-  page = null,
-  pageSize = null,
-) => {
-  const offset = (page - 1) * pageSize;
+export const getPropertyQuery = async () => {
   try {
-    const filter = {};
-    if (id)
-      filter.where = {
-        id: {
-          [Op.eq]: id,
-        },
-      };
-    if (name)
-      filter.where = {
-        ...filter.where,
-        name: {
-          [Op.like]: `%${name}%`,
-        },
-      };
-
-    if (gender) {
-      if (group) {
-        if (category) {
-          filter.where = {
-            ...filter.where,
-            [Op.and]: [
-              {
-                '$category.parent.parent.name$': gender,
-              },
-              {
-                '$category.parent.name$': group,
-              },
-              {
-                '$category.name$': category.replace(/-/g, ' '),
-              },
-            ],
-          };
-        } else {
-          filter.where = {
-            ...filter.where,
-            [Op.and]: [
-              {
-                '$category.parent.parent.name$': gender,
-              },
-              {
-                '$category.parent.name$': group,
-              },
-            ],
-          };
-        }
-      } else {
-        filter.where = {
-          ...filter.where,
-          '$category.parent.parent.name$': gender,
-        };
-      }
-    }
-    const res = await Product.findAndCountAll({
-      attributes: ['id', 'name', 'price', 'description'],
-      include: [
-        {
-          model: ProductCategory,
-          as: 'category',
-          attributes: ['id', 'name'],
-          include: [
-            {
-              model: ProductCategory,
-              as: 'parent',
-              include: [
-                {
-                  model: ProductCategory,
-                  as: 'parent',
-                },
-                {
-                  model: Size,
-                  as: 'size',
-                },
-              ],
-            },
-            {
-              model: Size,
-              as: 'size',
-            },
-          ],
-        },
-        {
-          model: ProductImage,
-          as: 'picture',
-        },
-        {
-          model: Stock,
-          as: 'stocks',
-          include: [{ model: Colour, as: 'colour' }],
-        },
-      ],
-      order: [[`${sortBy}`, `${orderBy}`]],
-      ...filter,
-      subQuery: false,
-      limit: id ? 1000 : +pageSize,
-      offset: offset,
-    });
     return res;
   } catch (err) {
     throw err;
@@ -124,7 +13,7 @@ export const getPropertyQuery = async (
 
 export const getPropertyByName = async ({ name = null }) => {
   try {
-    const res = await Product.findOne({
+    const res = await Property.findOne({
       where: {
         name: name,
       },
@@ -136,17 +25,21 @@ export const getPropertyByName = async ({ name = null }) => {
 };
 
 export const createPropertyQuery = async (
-  name = null,
-  price = null,
-  description = null,
-  productCategoryId = null,
+  name,
+  category_id,
+  description,
+  address,
+  city_id,
+  id = null,
 ) => {
   try {
-    const res = await Product.create({
+    const res = await Property.create({
       name,
-      price,
+      category_id,
       description,
-      productCategoryId,
+      address,
+      city_id,
+      tenant_id: id,
     });
     return res;
   } catch (err) {
@@ -188,7 +81,7 @@ export const updatePropertyQuery = async (
 
 export const deletePropertyQuery = async (id) => {
   try {
-    const res = await Product.destroy({
+    const res = await Property.destroy({
       where: {
         id: {
           [Op.eq]: id,
@@ -209,13 +102,9 @@ export const findCategoryQuery = async () => {
   }
 };
 
-export const findCityQuery = async (id) => {
+export const findCityQuery = async () => {
   try {
-    return await City.findAll({
-      where: {
-        city_id: id,
-      },
-    });
+    return await City.findAll();
   } catch (err) {
     throw err;
   }

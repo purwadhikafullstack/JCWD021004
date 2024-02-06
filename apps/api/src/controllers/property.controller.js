@@ -24,7 +24,7 @@ export const getPropertyController = async (req, res) => {
       pageSize,
     );
     return res.status(200).json({
-      message: 'Get Product Success',
+      message: 'Get Property Success',
       data: result,
     });
   } catch (err) {
@@ -36,19 +36,29 @@ export const getPropertyController = async (req, res) => {
 
 export const createPropertyController = async (req, res) => {
   try {
-    const { name, price, description, productCategoryId } = req.body;
+    const { user_id } = req.user;
+    const {
+      propertyName,
+      selectedCategory,
+      description,
+      address,
+      selectedCity,
+    } = req.body;
 
     const result = await createPropertyService(
-      name,
-      price,
+      propertyName,
+      selectedCategory,
       description,
-      productCategoryId,
+      address,
+      selectedCity,
+      user_id,
     );
     return res.status(200).json({
-      message: 'Create Product Success',
+      message: 'Create Property Success',
       data: result,
     });
   } catch (err) {
+    console.log(err);
     return res.status(500).json({
       message: err.message,
     });
@@ -67,7 +77,7 @@ export const updatePropertyController = async (req, res) => {
       id,
     );
     return res.status(201).json({
-      message: 'Update Product Success',
+      message: 'Update Property Success',
       data: result,
     });
   } catch (err) {
@@ -82,7 +92,7 @@ export const deletePropertyController = async (req, res) => {
     const { id } = req.params;
     const result = await deletePropertyService(id);
     return res.status(200).json({
-      message: 'Delete Product Success',
+      message: 'Delete Property Success',
       data: result,
     });
   } catch (err) {
@@ -95,11 +105,13 @@ export const deletePropertyController = async (req, res) => {
 export const findCategoryController = async (req, res) => {
   try {
     const result = await findCategoryService();
+
     return res.status(200).json({
       message: 'success',
       data: result,
     });
   } catch (err) {
+    console.log('error controller', err);
     return res.status(500).json({
       message: err.message,
     });
@@ -108,8 +120,8 @@ export const findCategoryController = async (req, res) => {
 
 export const findCityController = async (req, res) => {
   try {
-    const { id } = req.params;
-    const result = await findCityService(id);
+    const result = await findCityService();
+
     return res.status(200).json({
       message: 'success',
       data: result,
