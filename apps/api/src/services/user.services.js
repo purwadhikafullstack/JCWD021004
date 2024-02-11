@@ -9,7 +9,6 @@ import {
 import bcrypt from 'bcrypt';
 
 export const updateUsernameService = async (id, username) => {
-  console.log(`ini id :`, id, username);
   try {
     const check = await findUsernameQuery(username);
     console.log('ini data', check);

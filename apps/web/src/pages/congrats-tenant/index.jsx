@@ -10,7 +10,7 @@ import {
 } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 
-function SignupTenant() {
+function CongratsTenant() {
   const navigate = useNavigate();
 
   return (
@@ -39,10 +39,23 @@ function SignupTenant() {
         <Flex height="50vh" align="center" justify="center" mt={'30px'}>
           <HStack spacing="8">
             <Box>
-              <Box height="30vh" width="700px">
+              <Box height="30vh" width="900px">
                 <VStack align="start">
-                  <Text fontSize="5xl" fontWeight="bold" marginBottom="25px">
-                    List your property on
+                  <Text
+                    fontSize="4xl"
+                    fontWeight="bold"
+                    marginBottom="25px"
+                    textAlign={'left'}
+                  >
+                    Congratulations!
+                  </Text>
+                  <Text
+                    fontSize="4xl"
+                    fontWeight="bold"
+                    marginBottom="25px"
+                    textAlign={'left'}
+                  >
+                    your partner account has been successfully created.
                   </Text>
                   <Text
                     fontSize="4xl"
@@ -56,35 +69,30 @@ function SignupTenant() {
                     justifyContent="center"
                     rounded={'lg'}
                   >
-                    Relaxin.com
+                    Thank you
                   </Text>
                   <Text mt="6" fontSize="lg" align="start">
-                    Whether hosting is your side passion or full-time job,
-                    register your vacation rental on Relaxin.com to reach
-                    travelers worldwide
-                  </Text>
-                  <Text mt="6" fontSize="lg" colorScheme="#2A6F97">
-                    Join 29,279,209 other listings already on Relaxin.com
+                    Silahkan login kembali, menggunakan akun mitra anda.
                   </Text>
                 </VStack>
               </Box>
             </Box>
             <Box bg="white" color="#003580" p="8" rounded="lg">
               <Heading fontSize={'28px'} color={'black'}>
-                Get started now!
+                Login
               </Heading>
               <Divider borderWidth="1px" my={'5'} />
               <Text mt="4" fontSize="sm" my={'3'}>
-                Already started registration?
+                Already started?
               </Text>
               <Button
                 mt="2"
                 bg="black"
                 color={'white'}
                 _hover={{ bg: '#003580', color: 'white' }}
-                onClick={() => navigate('/signdata-tenant')}
+                onClick={() => navigate('/signin-screen')}
               >
-                Continue your registration
+                Login
               </Button>
             </Box>
           </HStack>
@@ -94,4 +102,4 @@ function SignupTenant() {
   );
 }
 
-export default SignupTenant;
+export default CongratsTenant;

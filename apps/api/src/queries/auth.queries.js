@@ -25,17 +25,12 @@ export const registerQuery = async (email, username) => {
 };
 
 // REGISTRATION TENANT
-export const registerTenantQuery = async (email, username, password) => {
+export const registerTenantQuery = async (email) => {
   const t = await User.sequelize.transaction();
   try {
-    const res = await User.create(
-      {
-        email,
-        username,
-        password,
-        role_id: 2,
-        is_verified: true,
-      },
+    const res = await User.update(
+      { role_id: 2 },
+      { where: { email: email } },
       { transaction: t },
     );
     await t.commit();

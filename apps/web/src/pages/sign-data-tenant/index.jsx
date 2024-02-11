@@ -2,9 +2,6 @@ import {
   Button,
   Text,
   Input,
-  InputGroup,
-  InputRightElement,
-  Icon,
   Flex,
   FormControl,
   FormLabel,
@@ -12,7 +9,6 @@ import {
   Box,
   useDisclosure,
 } from '@chakra-ui/react';
-import { EyeSlashIcon, EyeIcon } from '@heroicons/react/24/outline';
 import { FaGlobe, FaQuestionCircle } from 'react-icons/fa';
 import { BeatLoader } from 'react-spinners';
 import { useFormik } from 'formik';
@@ -23,9 +19,6 @@ import { useState } from 'react';
 import { SignUpScheme } from './services/Validation';
 
 function SignDataTenant() {
-  const [showPassword, setShowPassword] = useState(false);
-  const [showPasswordConfirmation, setShowPasswordConfirmation] =
-    useState(false);
   const navigate = useNavigate();
   const {
     isOpen: isSuccessModalOpen,
@@ -48,30 +41,27 @@ function SignDataTenant() {
   const formik = useFormik({
     initialValues: {
       email: '',
-      username: '',
-      password: '',
-      confirmationPassword: '',
     },
     validationSchema: SignUpScheme,
     onSubmit: async (values, { resetForm }) => {
       try {
         await register(
           values.email,
-          values.username,
-          values.password,
           setLoading,
           openSuccessModal,
           openErrorModal,
         );
+
+        // Adding a delay of 5 seconds before navigating
+        setTimeout(() => {
+          navigate('/create-property');
+        }, 3000);
       } catch (err) {
         console.log('gagal broh!');
       }
       resetForm({
         values: {
           email: '',
-          username: '',
-          password: '',
-          confirmationPassword: '',
         },
       });
     },
@@ -112,37 +102,10 @@ function SignDataTenant() {
           <Text fontSize="2xl" fontWeight="bold" color={'black'}>
             Create your partner account
           </Text>
-          <Text mt="2" fontSize="sm" color="gray.600">
+          <Text mt="2" mb="10" fontSize="sm" color="gray.600">
             Create an account to list and manage your property.
           </Text>
           <form onSubmit={formik.handleSubmit}>
-            <FormControl
-              isInvalid={formik.touched.username && formik.errors.username}
-              mt={'8'}
-            >
-              <FormLabel
-                htmlFor="username"
-                color="black"
-                fontSize="sm"
-                fontWeight="bold"
-              >
-                Fullname
-              </FormLabel>
-              <Input
-                name="username"
-                placeholder="Fullname"
-                value={formik.values.username}
-                onChange={formik.handleChange}
-                _placeholder={{ color: '#707070' }}
-                color={'black'}
-                mt="1"
-                mb="4"
-                w="full"
-              />
-              {formik.touched.username && formik.errors.username && (
-                <FormErrorMessage>{formik.errors.username}</FormErrorMessage>
-              )}
-            </FormControl>
             <FormControl
               isInvalid={formik.touched.email && formik.errors.email}
             >
@@ -169,108 +132,6 @@ function SignDataTenant() {
               {formik.touched.email && formik.errors.email && (
                 <FormErrorMessage>{formik.errors.email}</FormErrorMessage>
               )}
-            </FormControl>
-            <FormControl
-              isInvalid={formik.touched.password && formik.errors.password}
-            >
-              <FormLabel
-                htmlFor="password"
-                color="black"
-                fontSize="sm"
-                fontWeight="bold"
-              >
-                Create Password
-              </FormLabel>
-              <InputGroup>
-                <Input
-                  type={showPassword ? 'text' : 'password'}
-                  name="password"
-                  value={formik.values.password}
-                  onChange={formik.handleChange}
-                  required
-                  placeholder="Enter password"
-                  _placeholder={{ color: '#707070' }}
-                  color={'black'}
-                  mt="1"
-                  mb="4"
-                  w="full"
-                />
-                <InputRightElement top={'5px'} width={'50px'}>
-                  <Button
-                    variant={'ghost'}
-                    onClick={() =>
-                      setShowPassword((showPassword) => !showPassword)
-                    }
-                    backgroundColor={'transparent'}
-                    height={'64px'}
-                    _hover={'none'}
-                    color={'#707070'}
-                  >
-                    {showPassword ? (
-                      <Icon as={EyeIcon} boxSize={'24px'} />
-                    ) : (
-                      <Icon as={EyeSlashIcon} boxSize={'24px'} />
-                    )}
-                  </Button>
-                </InputRightElement>
-              </InputGroup>
-              {formik.touched.password && formik.errors.password && (
-                <FormErrorMessage>{formik.errors.password}</FormErrorMessage>
-              )}
-            </FormControl>
-            <FormControl
-              isInvalid={
-                formik.touched.confirmationPassword &&
-                formik.errors.confirmationPassword
-              }
-              marginBottom={'20px'}
-            >
-              <FormLabel
-                htmlFor="password"
-                color="black"
-                fontSize="sm"
-                fontWeight="bold"
-              >
-                Password Confirmation
-              </FormLabel>
-              <InputGroup>
-                <Input
-                  type={showPasswordConfirmation ? 'text' : 'password'}
-                  name="confirmationPassword"
-                  placeholder="Password confirmation"
-                  onChange={formik.handleChange}
-                  _placeholder={{ color: '#707070' }}
-                  color={'black'}
-                  mt="1"
-                  w="full"
-                />
-                <InputRightElement top={'5px'} width={'50px'}>
-                  <Button
-                    variant={'ghost'}
-                    onClick={() =>
-                      setShowPasswordConfirmation(
-                        (showPasswordConfirmation) => !showPasswordConfirmation,
-                      )
-                    }
-                    backgroundColor={'transparent'}
-                    height={'64px'}
-                    _hover={'none'}
-                    color={'#707070'}
-                  >
-                    {showPasswordConfirmation ? (
-                      <Icon as={EyeIcon} boxSize={'24px'} />
-                    ) : (
-                      <Icon as={EyeSlashIcon} boxSize={'24px'} />
-                    )}
-                  </Button>
-                </InputRightElement>
-              </InputGroup>
-              {formik.touched.confirmationPassword &&
-                formik.errors.confirmationPassword && (
-                  <FormErrorMessage>
-                    {formik.errors.confirmationPassword}
-                  </FormErrorMessage>
-                )}
             </FormControl>
 
             {loading ? (

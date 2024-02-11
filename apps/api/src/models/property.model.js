@@ -7,8 +7,9 @@ export default class Property extends Model {
    * The `models/index` file will call this method automatically.
    */
   static associate(models) {
-    this.belongsTo(models.PropertyCategory, { foreignKey: 'property_id' });
+    this.belongsTo(models.PropertyCategory, { foreignKey: 'category_id' });
     this.hasMany(models.Room, { foreignKey: 'room_id' });
+    this.belongsTo(models.User, { foreignKey: 'tenant_id' });
   }
 }
 

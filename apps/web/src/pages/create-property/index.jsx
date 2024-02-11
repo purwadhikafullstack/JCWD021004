@@ -253,11 +253,11 @@ function CreateProperty() {
                     color={'black'}
                     fontWeight={'bold'}
                   >
-                    Address (Ex : Street, Residence, Number of house)
+                    Address
                   </FormLabel>
                   <Input
                     name="address"
-                    placeholder="Enter the complete address of your property"
+                    placeholder="(Ex : Street, Residence, Number of house)"
                     value={formik.values.address}
                     onChange={formik.handleChange}
                     _placeholder={{ color: '#707070' }}

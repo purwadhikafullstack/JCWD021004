@@ -11,6 +11,23 @@ export const getPropertyQuery = async () => {
   }
 };
 
+export const getPropertyDetailQuery = async (property_id) => {
+  try {
+    // Assuming Property is your Sequelize model
+    return await Property.findOne({ where: { property_id: property_id } });
+  } catch (err) {
+    throw err;
+  }
+};
+
+export const getTenantPropertyQuery = async (tenant_id) => {
+  try {
+    return await Property.findAll({ where: { tenant_id: tenant_id } });
+  } catch (err) {
+    throw err;
+  }
+};
+
 export const getPropertyByName = async ({ name = null }) => {
   try {
     const res = await Property.findOne({
@@ -105,6 +122,19 @@ export const findCategoryQuery = async () => {
 export const findCityQuery = async () => {
   try {
     return await City.findAll();
+  } catch (err) {
+    throw err;
+  }
+};
+
+export const findPropertyByCityQuery = async (selectedCity) => {
+  try {
+    const properties = await Property.findAll({
+      where: {
+        city_id: selectedCity,
+      },
+    });
+    return properties;
   } catch (err) {
     throw err;
   }

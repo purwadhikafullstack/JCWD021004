@@ -73,56 +73,10 @@ export const registerService = async (email, username) => {
 };
 
 // REGISTRATION TENANT
-export const registerTenantService = async (email, username, password) => {
-  console.log(email, username, password);
+export const registerTenantService = async (email) => {
+  console.log(email);
   try {
-    // CHECK WHETHER OR NOT EMAIL AND USERNAME EXIST
-    const check = await findUserQuery({ email });
-    if (check) throw new Error('Email already exist');
-
-    const salt = await bcrypt.genSalt(10);
-    const hashPassword = await bcrypt.hash(password, salt);
-
-    const res = await registerTenantQuery(email, username, hashPassword);
-
-    // GENERATE TOKEN FOR NEW USER TO VERIFY THEIR EMAILS
-    const secretKey = process.env.JWT_SECRET_KEY;
-    if (!secretKey) {
-      throw new Error('JWT_SECRET_KEY is not set in the environment');
-    }
-
-    const tokenVerification = jwt.sign({ email }, secretKey, {
-      expiresIn: '1hr',
-    });
-
-    // TEMPLATE EMAIL
-    const temp = await fs.readFileSync(
-      path.join(__dirname, '../template', 'email-tenant-verification.html'),
-      'utf-8',
-    );
-
-    // SEND EMAIL FOR EMAIL VERIFICATION
-    const emailVerificationLink = `${process.env.FE_BASE_URL}/create-property?token=${tokenVerification}`;
-    const tempCompile = await handlebars.compile(temp);
-    const tempResult = tempCompile({
-      email: email,
-      link: emailVerificationLink,
-    });
-    const gmailUser = process.env.GMAIL_USER;
-    if (typeof gmailUser !== 'string') {
-      throw new Error('GMAIL_USER is not set in the environment');
-    }
-
-    if (typeof email !== 'string') {
-      throw new Error('Recipient email is invalid');
-    }
-
-    await transporter.sendMail({
-      from: gmailUser,
-      to: email,
-      subject: 'Email Confirmation',
-      html: tempResult,
-    });
+    const res = await registerTenantQuery(email);
 
     return res;
   } catch (err) {
@@ -187,6 +141,35 @@ export const loginService = async (email, password) => {
 
     const isValid = await bcrypt.compare(password, check.password);
     if (!isValid) throw new Error('Password is incorrect');
+
+    let payload = {
+      user_id: check.user_id,
+      email: check.email,
+      username: check.username,
+      role_id: check.role_id,
+    };
+
+    const token = jwt.sign(payload, process.env.JWT_SECRET_KEY, {
+      expiresIn: '1hr',
+    });
+    return { user: check, token };
+  } catch (err) {
+    throw err;
+  }
+};
+
+export const loginTenantService = async (email, password) => {
+  try {
+    const check = await findUserQuery({ email });
+    if (!check) throw new Error("Email doesn't exist");
+
+    const isValid = await bcrypt.compare(password, check.password);
+    if (!isValid) throw new Error('Password is incorrect');
+
+    const role_id = check.role_id;
+    if (role_id === 1) {
+      throw new Error('Anda bukan Tenant');
+    }
 
     let payload = {
       user_id: check.user_id,

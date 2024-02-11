@@ -3,6 +3,7 @@ import {
   registerTenantService,
   emailVerificationService,
   loginService,
+  loginTenantService,
   keepLoginService,
   forgotPasswordService,
   resetPasswordService,
@@ -31,9 +32,9 @@ export const registerController = async (req, res) => {
 // REGISTRATION TENANT
 export const registerTenantController = async (req, res) => {
   try {
-    const { email, username, password } = req.body;
+    const { email } = req.body;
 
-    const result = await registerTenantService(email, username, password);
+    const result = await registerTenantService(email);
 
     return res.status(200).json({
       message: 'Success',
@@ -90,6 +91,21 @@ export const loginController = async (req, res) => {
   try {
     const { email, password } = req.body;
     const result = await loginService(email, password);
+
+    return res.status(200).json({
+      message: 'Success',
+      data: result,
+    });
+  } catch (err) {
+    console.log(err.message);
+    return res.status(500).send(err.message);
+  }
+};
+
+export const loginTenantController = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const result = await loginTenantService(email, password);
 
     return res.status(200).json({
       message: 'Success',

@@ -4,6 +4,7 @@ import {
   registerTenantController,
   emailVerificationController,
   loginController,
+  loginTenantController,
   forgotPasswordController,
   keepLoginController,
   resetPasswordController,
@@ -21,26 +22,15 @@ const validations = [
   body('username').notEmpty().withMessage('Username cannot be emptied'),
 ];
 
-const emailValidation = [
-  body('email')
-    .notEmpty()
-    .withMessage('Email cannot be empty')
-    .isEmail()
-    .withMessage('Invalid email format'),
-];
-
 // POST
 authRouter.post(
   '/user-registration',
   validator(validations),
   registerController,
 );
-authRouter.post(
-  '/tenant-registration',
-  validator(emailValidation),
-  registerTenantController,
-);
+authRouter.patch('/tenant-registration', registerTenantController);
 authRouter.post('/login', loginController);
+authRouter.post('/login-tenant', loginTenantController);
 authRouter.post('/request-password-reset', forgotPasswordController);
 authRouter.post('/google', googleLoginController);
 

@@ -1,6 +1,4 @@
 import './Home.css';
-import Navbar from '../../components/Navbar/Navbar';
-import Footer from '../../components/Footer/Footer';
 import {
   Box,
   VStack,
@@ -11,8 +9,13 @@ import {
   Grid,
   Heading,
 } from '@chakra-ui/react';
+import Navbar from '../../components/Navbar/Navbar';
+import Footer from '../../components/Footer/Footer';
+import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import 'react-datepicker/dist/react-datepicker.css';
+import { useSelector } from 'react-redux';
+import { getCity } from './services/ReadCity';
+import { FilterProperty } from './services/FilterProperty';
 import airport from '../../assets/images/home/airport.jpg';
 import vacation from '../../assets/images/home/vacation.jpg';
 import ubud from '../../assets/images/home/ubud.jpg';
@@ -20,18 +23,33 @@ import canggu from '../../assets/images/home/canggu.jpg';
 import jakarta from '../../assets/images/home/jakarta.jpg';
 import uluwatu from '../../assets/images/home/uluwatu.jpg';
 import sanur from '../../assets/images/home/sanur.jpg';
-import { getCity } from './services/ReadCity';
-// import { useSelector } from 'react-redux';
+import 'react-datepicker/dist/react-datepicker.css';
 
 function Home() {
-  // const { user } = useSelector((state) => state.AuthReducer.users);
+  const isLogin = useSelector((state) => state.AuthReducer.isLogin);
+  const user = useSelector((state) => state.AuthReducer.users);
   const [cities, setCities] = useState([]);
+  const [selectedCity, setSelectedCity] = useState({ id: '', name: '' });
+  const navigate = useNavigate();
 
   useEffect(() => {
     getCity().then((data) => {
       setCities(data);
     });
   }, []);
+
+  const handleSearch = async () => {
+    try {
+      const result = await FilterProperty(selectedCity.id);
+
+      // Navigasi ke halaman PropertyList dan kirim hasil filter sebagai properti
+      navigate('/property-list', {
+        state: { searchResult: result, selectedCity: selectedCity },
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <>
@@ -51,16 +69,20 @@ function Home() {
                 fontSize={'48px'}
                 mb={'25px'}
               >
-                Where to next, Nabhan Sando?
+                {isLogin
+                  ? `Where to next, ${user.username}?`
+                  : 'Find your next stay'}
               </Text>
               <Text color={'white'} fontSize={'24px'}>
-                Find exclusive Genius rewards in every corner of the world!{' '}
+                {isLogin
+                  ? 'Find exclusive Genius rewards in every corner of the world!'
+                  : 'Search deals on hotels, homes, and much more...'}
               </Text>
             </VStack>
           </Box>
         </Box>
         <Box id="search-hotels" mt={'-70px'}>
-          <Box w="full" maxW="1100px" mx="auto" p={[4, 6, 8]}>
+          <Box w="full" maxW="700px" mx="auto" p={[4, 6, 8]}>
             <Flex
               gridGap={1.5}
               bg={'#FFB700'}
@@ -72,18 +94,20 @@ function Home() {
             >
               <Select
                 name={'cityId'}
-                // value={selectedCity}
-                placeholder={'SELECT THE CITY'}
+                value={selectedCity.id}
+                placeholder={'Kuta'}
                 fontWeight="bold"
                 bg={'white'}
                 color={'black'}
                 height={'55px'}
                 width={'100%'}
-                // isDisabled={!citylist?.length}
-                // onChange={(e) => {
-                //   setSelectedCity(e.target.value);
-                //   formik.handleChange(e);
-                // }}
+                isDisabled={!cities?.length}
+                onChange={(e) =>
+                  setSelectedCity({
+                    id: e.target.value,
+                    name: e.target.selectedOptions[0].text,
+                  })
+                }
               >
                 {cities?.map((city) => (
                   <option key={city.city_id} value={city.city_id}>
@@ -91,11 +115,13 @@ function Home() {
                   </option>
                 ))}
               </Select>
+
               <Button
                 bg={'brand.lightred'}
                 _hover={{ bg: '#013B94' }}
                 color={'white'}
                 height={'55px'}
+                onClick={handleSearch}
               >
                 Search
               </Button>

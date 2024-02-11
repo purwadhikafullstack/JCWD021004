@@ -1,6 +1,5 @@
 import {
   Button,
-  Badge,
   Box,
   Flex,
   Grid,
@@ -27,31 +26,53 @@ import {
   VStack,
   Avatar,
 } from '@chakra-ui/react';
-import {
-  FaTrash,
-  FaUsers,
-  FaChartLine,
-  FaGlobe,
-  FaQuestionCircle,
-} from 'react-icons/fa';
+import { FaTrash, FaGlobe, FaQuestionCircle } from 'react-icons/fa';
 import { LuPencil } from 'react-icons/lu';
-import { FaRegBell } from 'react-icons/fa';
-import {
-  FiHome,
-  FiShoppingCart,
-  FiSearch,
-  FiPackage,
-  FiLogOut,
-} from 'react-icons/fi';
+import { FiSearch, FiLogOut } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logoutSuccess } from '../../redux/reducer/authReducer';
+import { useState, useEffect } from 'react';
+import { fetchUserProperties } from './services/fetchUserProperties';
+import GridItem1 from './components/grid-item-1';
 
 function PropertyManagement() {
-  const navigate = useNavigate();
   const isLogin = useSelector((state) => state.AuthReducer.isLogin);
   const user = useSelector((state) => state.AuthReducer.users);
+  const [properties, setProperties] = useState([]);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (isLogin && user && user.role_id === 2) {
+      const fetchProperties = async () => {
+        try {
+          const fetchedProperties = await fetchUserProperties(user.user_id);
+          setProperties(fetchedProperties);
+        } catch (error) {
+          console.error(error);
+        }
+      };
+      fetchProperties();
+    }
+  }, [isLogin, user]);
+
+  const categories = [
+    { id: 1, name: 'Apartemen' },
+    { id: 2, name: 'Hotel' },
+    { id: 3, name: 'Resort' },
+    { id: 4, name: 'Villa' },
+    // Tambahkan data kategori lainnya sesuai kebutuhan
+  ];
+
+  const categoryMap = {};
+  categories.forEach((category) => {
+    categoryMap[category.id] = category.name;
+  });
+
+  const handleClick = () => {
+    navigate('/');
+  };
 
   return (
     <>
@@ -63,7 +84,12 @@ function PropertyManagement() {
         height={'82px'}
         justifyContent={'space-between'}
       >
-        <Text color="white" fontSize="2xl" fontWeight="bold">
+        <Text
+          color="white"
+          fontSize="2xl"
+          fontWeight="bold"
+          onClick={handleClick}
+        >
           Relaxin.com
         </Text>
         <Flex alignItems="center">
@@ -75,7 +101,7 @@ function PropertyManagement() {
           </Box>
         </Flex>
       </Flex>
-      <Box padding={'20'} pt={'4'} bg={'#013B94'}>
+      <Box padding={'20'} pt={'5'} bg={'#013B94'}>
         <Grid
           templateColumns="repeat(3, 1fr)"
           gap={4}
@@ -85,176 +111,7 @@ function PropertyManagement() {
           borderRadius={'20px'}
           border="1px solid #000"
         >
-          <GridItem colSpan={1} bg="FAFBFB">
-            <Flex direction="column" h="full" p={4}>
-              <Flex
-                align="center"
-                borderBottom="1px"
-                borderColor="gray.200"
-                pb={5}
-              >
-                <Box
-                  bg={'#FFB700'}
-                  h={'50px'}
-                  w={'260px'}
-                  borderRadius={'5px'}
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="center"
-                >
-                  <Text
-                    as="a"
-                    display="flex"
-                    align="center"
-                    fontSize={'22px'}
-                    fontWeight="bold"
-                    color={'black'}
-                  >
-                    Management Property
-                  </Text>
-                </Box>
-                <Button ml="auto" size="sm" bg={'black'} color={'white'}>
-                  <FaRegBell boxSize={4} />
-                </Button>
-              </Flex>
-
-              <Box>
-                <Flex
-                  direction="column"
-                  fontSize="16px"
-                  fontWeight="bold"
-                  p={2}
-                >
-                  <Text
-                    as="a"
-                    display="flex"
-                    alignItems="center"
-                    p={2}
-                    h={'50px'}
-                    rounded="lg"
-                    color={'gray.500'}
-                    transition="all"
-                    _hover={{ color: 'black', bg: 'gray.100' }}
-                    mb={2}
-                  >
-                    <Box mr={'5'}>
-                      <FiHome style={{ fontSize: '22px' }} />
-                    </Box>
-                    Home
-                  </Text>
-                  <Text
-                    as="a"
-                    display="flex"
-                    alignItems="center"
-                    p={2}
-                    h={'50px'}
-                    rounded="lg"
-                    color={'gray.500'}
-                    transition="all"
-                    _hover={{ color: 'black', bg: 'gray.100' }}
-                    mb={2}
-                  >
-                    <Box mr={'5'}>
-                      <FiShoppingCart style={{ fontSize: '22px' }} />
-                    </Box>
-                    Orders
-                    <Badge
-                      ml="auto"
-                      flexShrink={0}
-                      h={6}
-                      w={6}
-                      borderRadius="full"
-                      bg={'black'}
-                      color={'white'}
-                      display="flex"
-                      justifyContent="center"
-                      alignItems="center"
-                    >
-                      6
-                    </Badge>
-                  </Text>
-                  <Text
-                    as="a"
-                    display="flex"
-                    alignItems="center"
-                    p={2}
-                    h={'50px'}
-                    rounded="lg"
-                    color={'gray.500'}
-                    transition="all"
-                    _hover={{ color: 'black', bg: 'gray.100' }}
-                    mb={2}
-                  >
-                    <Box mr={'5'}>
-                      <FiPackage style={{ fontSize: '22px' }} />
-                    </Box>
-                    Properties
-                  </Text>
-                  <Text
-                    as="a"
-                    display="flex"
-                    alignItems="center"
-                    p={2}
-                    h={'50px'}
-                    rounded="lg"
-                    color={'gray.500'}
-                    transition="all"
-                    _hover={{ color: 'black', bg: 'gray.100' }}
-                    mb={2}
-                  >
-                    <Box mr={'5'}>
-                      <FaUsers style={{ fontSize: '22px' }} />
-                    </Box>
-                    Customers
-                  </Text>
-                  <Text
-                    as="a"
-                    display="flex"
-                    alignItems="center"
-                    p={2}
-                    h={'50px'}
-                    rounded="lg"
-                    color={'gray.500'}
-                    transition="all"
-                    _hover={{ color: 'black', bg: 'gray.100' }}
-                    mb={2}
-                  >
-                    <Box mr={'5'}>
-                      <FaChartLine style={{ fontSize: '22px' }} />
-                    </Box>
-                    Analytics
-                  </Text>
-                </Flex>
-              </Box>
-
-              <Box mt={'3'}>
-                {/* Upgrade to Pro Card */}
-                <Box bg="white" shadow="md" rounded="lg" p={4}>
-                  <Text
-                    fontSize="xl"
-                    fontWeight="bold"
-                    color={'black'}
-                    mb={'3'}
-                  >
-                    Upgrade to Pro
-                  </Text>
-                  <Text color="gray.600">
-                    Unlock all features and get unlimited access to our support
-                    team
-                  </Text>
-                  <Button
-                    mt={3}
-                    w="full"
-                    size="sm"
-                    bg={'black'}
-                    color={'white'}
-                  >
-                    Upgrade
-                  </Button>
-                </Box>
-              </Box>
-            </Flex>
-          </GridItem>
+          <GridItem1 />
 
           <GridItem colSpan={2} p={4}>
             {/* Header */}
@@ -294,10 +151,11 @@ function PropertyManagement() {
                   />
                 </form>
               </Box>
+
               {/* User Menu */}
               {isLogin ? (
                 <>
-                  <Box w={'200px'} h={'60px'} ml={'20px'} bg={'#013B94'}>
+                  <Box w={'130px'} h={'60px'} ml={'5'} bg={'white'}>
                     <HStack spacing={{ base: '0', md: '6' }}>
                       <Flex alignItems={'center'}>
                         <Menu>
@@ -314,16 +172,20 @@ function PropertyManagement() {
                                 spacing="1px"
                                 ml="2"
                               >
-                                <Text fontSize="lg" fontWeight={'bold'}>
+                                <Text
+                                  fontSize="lg"
+                                  fontWeight={'bold'}
+                                  color={'black'}
+                                >
                                   {user.username}
                                 </Text>
 
                                 {user.role_id == 1 ? (
-                                  <Text fontSize="sm" color="white">
+                                  <Text fontSize="sm" color="black">
                                     Ordinary user
                                   </Text>
                                 ) : (
-                                  <Text fontSize="sm" color="white">
+                                  <Text fontSize="sm" color="black">
                                     Tenant
                                   </Text>
                                 )}
@@ -429,37 +291,52 @@ function PropertyManagement() {
                     </Tr>
                   </Thead>
                   <Tbody color={'black'}>
-                    <Tr>
-                      <Td>
-                        <img
-                          alt="Property image"
-                          className="aspect-square rounded-md object-cover"
-                          height="64"
-                          src="/placeholder.svg"
-                          width="64"
-                        />
-                      </Td>
-                      <Td fontWeight="medium">Acme Apartments</Td>
-                      <Td>Apartment</Td>
-                      <Td>Luxury apartments in the heart of the city.</Td>
-                      <Td>
-                        <ul>
-                          <li>Bedroom</li>
-                          <li>Bathroom</li>
-                          <li>Living Room</li>
-                        </ul>
-                      </Td>
-                      <Td textAlign="right">
-                        <Button mr={2} size="sm" variant="outline">
-                          <LuPencil boxSize={4} />
-                          <span className="sr-only">Edit</span>
-                        </Button>
-                        <Button size="sm" variant="outline">
-                          <FaTrash boxSize={4} />
-                          <span className="sr-only">Delete</span>
-                        </Button>
-                      </Td>
-                    </Tr>
+                    {properties.map((property) => (
+                      <Tr key={property.property_id}>
+                        <Td>
+                          <img
+                            alt="Property image"
+                            height="64"
+                            // src={property.imageUrl}
+                            width="64"
+                          />
+                        </Td>
+                        <Td fontWeight="medium">{property.name}</Td>
+                        <Td>{categoryMap[property.category_id]}</Td>
+                        <Td
+                          style={{
+                            maxWidth: '200px',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                          }}
+                        >
+                          {property.description}
+                        </Td>
+                        <Td>
+                          <ul>
+                            {/* {property.features.map((feature, index) => (
+                              <li key={index}>{feature}</li>
+                            ))} */}
+                          </ul>
+                        </Td>
+                        <Td
+                          style={{
+                            display: 'flex',
+                            justifyContent: 'flex-end',
+                          }}
+                        >
+                          <Button mr={2} size="sm" variant="outline">
+                            <LuPencil boxSize={4} />
+                          </Button>
+                          <Box ml={2}>
+                            <Button size="sm" variant="outline">
+                              <FaTrash boxSize={4} />
+                            </Button>
+                          </Box>
+                        </Td>
+                      </Tr>
+                    ))}
                   </Tbody>
                 </Table>
               </Box>

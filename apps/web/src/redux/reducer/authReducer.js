@@ -66,6 +66,28 @@ export const login = (email, password) => {
   };
 };
 
+export const loginTenant = (email, password) => {
+  return async (dispatch) => {
+    try {
+      const res = await axios.post(
+        'http://localhost:8000/api/auth/login-tenant',
+        {
+          email,
+          password,
+        },
+      );
+      localStorage.setItem('token', res?.data?.data?.token);
+      console.log(res.data?.data?.token);
+      console.log(res.data?.data);
+      dispatch(setUser(res?.data?.data?.user));
+      dispatch(loginSuccess());
+      toast.success('Login success');
+    } catch (err) {
+      toast.error('You are not a tenant');
+    }
+  };
+};
+
 export const Googlelogin = (
   username,
   email,

@@ -1,5 +1,3 @@
-import Navbar from '../../components/Navbar/Navbar';
-import Footer from '../../components/Footer/Footer';
 import {
   Box,
   Button,
@@ -20,21 +18,28 @@ import {
   Divider,
   Image,
 } from '@chakra-ui/react';
-import maps from '../../assets/images/home/Google-Images.jpeg';
+import { FaCity } from 'react-icons/fa';
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import { CalendarIcon } from '@chakra-ui/icons';
 import { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import Navbar from '../../components/Navbar/Navbar';
+import Footer from '../../components/Footer/Footer';
+import maps from '../../assets/images/home/Google-Images.jpeg';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { FaCity } from 'react-icons/fa';
-import propertiesData from './services/PropertiesData';
-// import { useState, useEffect } from 'react';
-// import { useSelector } from 'react-redux';
 
 function PropertyList() {
-  // const { user } = useSelector((state) => state.AuthReducer.users);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
+
+  const location = useLocation();
+  const { searchResult, selectedCity } = location.state;
+
+  const navigate = useNavigate();
+
+  // Menghitung jumlah properti yang ditemukan
+  const propertiesCount = searchResult ? searchResult.length : 0;
 
   const updateButtonText = () => {
     if (startDate && endDate) {
@@ -44,6 +49,11 @@ function PropertyList() {
     } else {
       return 'Check in Date - Check out Date';
     }
+  };
+
+  const handleShowPrices = (propertyId) => {
+    // Navigasi ke halaman property-detail dengan property_id yang dipetakan
+    navigate(`/property-detail/${propertyId}`);
   };
 
   return (
@@ -243,6 +253,7 @@ function PropertyList() {
                     </VStack>
                   </Box>
                 </Box>
+
                 <Box colSpan={{ base: '4', md: '3' }}>
                   <Box
                     fontSize="22px"
@@ -250,14 +261,14 @@ function PropertyList() {
                     color={'black'}
                     bg={'#FFB700'}
                     height={'30px'}
-                    width={'320px'}
+                    width={'350px'}
                     mb={'20px'}
                     textAlign={'start'}
                     display="flex"
                     alignItems="center"
-                    pl="4"
+                    pl="3"
                   >
-                    Kuta: 321 properties found.
+                    {selectedCity.name}, {propertiesCount} properties found.
                   </Box>
 
                   <VStack align={'start'}>
@@ -286,9 +297,9 @@ function PropertyList() {
                   </VStack>
 
                   <Box mt="4">
-                    {propertiesData.map((property, index) => (
+                    {searchResult.map((property) => (
                       <HStack
-                        key={index}
+                        key={property.property_id}
                         className="properties"
                         border="1px solid #ccc"
                         borderRadius="5px"
@@ -299,8 +310,8 @@ function PropertyList() {
                       >
                         <Box
                           as="img"
-                          h="170px" // Set the desired height
-                          w="200px" // Set the desired width
+                          h="170px"
+                          w="200px"
                           alt={property.imageAlt}
                           src={property.imageUrl}
                           style={{
@@ -312,11 +323,12 @@ function PropertyList() {
                             fontSize="lg"
                             fontWeight="semibold"
                             color={'black'}
+                            mb="2"
                           >
                             {property.name}
                           </Box>
-                          <Box fontSize="sm" color="gray.600">
-                            {property.location}
+                          <Box fontSize="sm" color="gray.600" mb="2">
+                            {property.address}
                           </Box>
                           <Box fontSize="sm" color={'black'}>
                             {property.description}
@@ -332,9 +344,15 @@ function PropertyList() {
                             }}
                             mb="70px"
                           >
-                            {property.rating}
+                            {(Math.floor(Math.random() * 11) + 40) / 10}
                           </Badge>
-                          <Button color={'black'} mt="70px">
+                          <Button
+                            color={'black'}
+                            mt="70px"
+                            onClick={() =>
+                              handleShowPrices(property.property_id)
+                            }
+                          >
                             Show prices
                           </Button>
                         </VStack>

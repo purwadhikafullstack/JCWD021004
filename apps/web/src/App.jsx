@@ -16,6 +16,7 @@ import SignDataTenant from './pages/sign-data-tenant';
 import PropertyList from './pages/property-list';
 import CreateProperty from './pages/create-property';
 import PropertyManagement from './pages/property-management';
+import CongratsTenant from './pages/congrats-tenant';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/signup-tenant" element={<SignupTenant />} />
           <Route path="/signdata-tenant" element={<SignDataTenant />} />
+          <Route path="/congrats" element={<CongratsTenant />} />
           <Route path="/auth/email-verification" element={<Verification />} />
           <Route path="/signin-screen" element={<SigninScreen />} />
           <Route path="/signin-user" element={<SigninUser />} />
@@ -43,10 +45,27 @@ function App() {
               </LoggedInRoute>
             }
           />
-          <Route path="/create-property" element={<CreateProperty />} />
+          <Route
+            path="/create-property"
+            element={
+              <LoggedInRoute>
+                <CreateProperty />
+              </LoggedInRoute>
+            }
+          />
           <Route path="/property-list" element={<PropertyList />} />
-          <Route path="/property-detail" element={<PropertyDetail />} />
-          <Route path="/property-management" element={<PropertyManagement />} />
+          <Route
+            path="/property-detail/:propertyId"
+            element={<PropertyDetail />}
+          />
+          <Route
+            path="/property-management"
+            element={
+              <LoggedInRoute>
+                <PropertyManagement />
+              </LoggedInRoute>
+            }
+          />
         </Routes>
       </Auth>
     </>

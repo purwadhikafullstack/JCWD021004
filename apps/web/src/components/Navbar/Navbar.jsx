@@ -19,12 +19,26 @@ import { Link, useNavigate } from 'react-router-dom';
 import { logoutSuccess } from '../../redux/reducer/authReducer';
 import { useSelector, useDispatch } from 'react-redux';
 import NavbarData from './components/navbarData';
+import { toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Navbar() {
   const navigate = useNavigate();
   const isLogin = useSelector((state) => state.AuthReducer.isLogin);
   const user = useSelector((state) => state.AuthReducer.users);
   const dispatch = useDispatch();
+
+  const handleClick = () => {
+    if (user.role_id === 1) {
+      navigate('/signup-tenant');
+    } else if (user.role_id === 2) {
+      navigate('/property-management');
+    } else {
+      toast.info('Silahkan login atau register terlebih dahulu');
+      console.error('Invalid role_id:', user.role_id);
+    }
+  };
 
   return (
     <Box>
@@ -74,15 +88,20 @@ function Navbar() {
               _active={{
                 opacity: '50%',
               }}
-              onClick={() => navigate('/signup-tenant')}
+              onClick={handleClick}
             >
-              List your property
+              {user.role_id === 2 ? 'Manage Properties' : 'List your property'}
             </Button>
           </Grid>
 
           {isLogin ? (
             <>
-              <Box w={'200px'} h={'60px'} ml={'20px'} bg={'#013B94'}>
+              <Box
+                w={user.role_id === 1 ? '200px' : '150px'}
+                h={'60px'}
+                ml={'20px'}
+                bg={'#013B94'}
+              >
                 <HStack spacing={{ base: '0', md: '6' }}>
                   <Flex alignItems={'center'}>
                     <Menu>
@@ -132,11 +151,7 @@ function Navbar() {
                           Settings
                         </MenuItem>
                         <MenuDivider />
-                        <MenuItem
-                          onClick={() =>
-                            dispatch(logoutSuccess(), navigate('/'))
-                          }
-                        >
+                        <MenuItem>
                           <Button
                             width={'full'}
                             bg={'black'}
@@ -144,6 +159,7 @@ function Navbar() {
                             fontWeight={'bold'}
                             color={'white'}
                             _hover={{ color: 'red', bg: 'none' }}
+                            onClick={() => dispatch(logoutSuccess())}
                           >
                             Sign out
                             <FiLogOut
@@ -202,6 +218,7 @@ function Navbar() {
         </Flex>
       </Flex>
       <NavbarData />
+      <ToastContainer />
     </Box>
   );
 }

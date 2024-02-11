@@ -23,16 +23,17 @@ import {
 import { Link } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { login } from '../../../redux/reducer/authReducer';
+import { loginTenant } from '../../../redux/reducer/authReducer';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { Navigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function SigninTenant() {
   const [showPassword, setShowPassword] = useState(false);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const user = useSelector((state) => state.AuthReducer.users);
 
   const formik = useFormik({
     initialValues: {
@@ -40,11 +41,14 @@ function SigninTenant() {
       password: '',
     },
     onSubmit: (values, { resetForm }) => {
-      dispatch(login(values.email, values.password));
+      dispatch(loginTenant(values.email, values.password));
       resetForm({ values: { email: '', password: '' } });
-      navigate('/user-management');
     },
   });
+
+  if (user.email) {
+    return <Navigate to="/property-management" replace="true" />;
+  }
 
   return (
     <>

@@ -26,18 +26,25 @@ import {
   Tab,
   TabPanel,
 } from '@chakra-ui/react';
+import { useState, useRef, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { getPropertyDetails } from './services/getPropertyDetail';
+import { CalendarIcon } from '@chakra-ui/icons';
 import Navbar from '../../components/Navbar/Navbar';
+import NavbarDataProperty from './components/navbar-data';
 import Footer from '../../components/Footer/Footer';
 import maps from '../../assets/images/home/Google-Images.jpeg';
-import { CalendarIcon } from '@chakra-ui/icons';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { useState, useRef } from 'react';
-import NavbarDataProperty from './components/navbar-data';
 
 function PropertyDetail() {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
+
+  const { propertyId } = useParams();
+
+  const [propertyDetails, setPropertyDetails] = useState(null);
+
   const overviewRef = useRef(null);
   const aboutRef = useRef(null);
   const facilitiesRef = useRef(null);
@@ -74,6 +81,23 @@ function PropertyDetail() {
     }
   };
 
+  useEffect(() => {
+    const fetchPropertyDetails = async () => {
+      try {
+        const details = await getPropertyDetails(propertyId);
+        setPropertyDetails(details);
+      } catch (error) {
+        console.error('Error fetching property details:', error);
+      }
+    };
+
+    fetchPropertyDetails();
+
+    return () => {
+      setPropertyDetails(null);
+    };
+  }, [propertyId]);
+
   return (
     <>
       <Navbar ref={overviewRef} />
@@ -92,15 +116,19 @@ function PropertyDetail() {
             <Box mb={4}>
               <Badge variant="subtle">Airport shuttle</Badge>
             </Box>
-            <Text fontSize="26px" fontWeight="bold" mb={2} color={'black'}>
-              Suka Beach Inn
-            </Text>
-            <Text fontSize="sm" mb={'40px'} color={'black'}>
-              Jl. Benesari, Gang Poppies II, 80361 Kuta, Indonesia –{' '}
-              <Link color="blue.600" href="#">
-                Great location - show map
-              </Link>
-            </Text>
+            {propertyDetails && (
+              <>
+                <Text fontSize="26px" fontWeight="bold" mb={2} color={'black'}>
+                  {propertyDetails.name}
+                </Text>
+                <Text fontSize="sm" mb={'40px'} color={'black'}>
+                  {propertyDetails.address}{' '}
+                  <Link color="blue.600" href="#">
+                    Great location - show map
+                  </Link>
+                </Text>
+              </>
+            )}
             <Grid templateColumns={['1fr', '1fr', '1fr 1fr']} gap={4} mb={4}>
               {[1, 2].map((index) => (
                 <Image
@@ -128,30 +156,27 @@ function PropertyDetail() {
                 />
               ))}
             </Grid>
-            <Box
-              mt={'40px'}
-              border="1px solid #ddd"
-              borderRadius="8px"
-              padding="20px"
-            >
-              <Text
-                fontSize="20px"
-                fontWeight={'bold'}
-                color={'black'}
-                textAlign={'left'}
+            {propertyDetails && (
+              <Box
+                mt={'40px'}
+                border="1px solid #ddd"
+                borderRadius="8px"
+                padding="20px"
               >
-                About
-              </Text>
-              <Divider m={'4'} />
-              <Text fontSize="16px" color={'black'} textAlign="left">
-                Kuta district in Kuta, 1312 feet from Kuta Beach, Suka Beach Inn
-                offers accommodations with an outdoor pool. Free WiFi is
-                provided and free private parking is available on site. For your
-                convenience, a terrace or balcony are featured in certain rooms.
-                Each room comes with a private bathroom equipped with a shower
-                and a TV. Airport shuttle service is available with a surcharge.
-              </Text>
-            </Box>
+                <Text
+                  fontSize="20px"
+                  fontWeight={'bold'}
+                  color={'black'}
+                  textAlign={'left'}
+                >
+                  About
+                </Text>
+                <Divider m={'4'} />
+                <Text fontSize="16px" color={'black'} textAlign="left">
+                  {propertyDetails.description}
+                </Text>
+              </Box>
+            )}
           </VStack>
           <VStack align="start" pl={[0, 0, 8]} w={['100%', '100%', '1/3']}>
             <Box mb={4}>
@@ -201,8 +226,7 @@ function PropertyDetail() {
             padding="20px"
           >
             <Text fontSize="20px" fontWeight={'bold'}>
-              Facilities of {'nama property'}
-              {/* // ambil nama dari property // */}
+              Facilities of {propertyDetails ? propertyDetails.name : ''}
             </Text>
             <Divider m={'4'} />
             <UnorderedList>

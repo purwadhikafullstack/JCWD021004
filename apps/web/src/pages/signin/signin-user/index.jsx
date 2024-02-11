@@ -26,9 +26,9 @@ import { useDispatch } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 import { login } from '../../../redux/reducer/authReducer';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useSelector } from 'react-redux';
 
 function SigninUser() {
   const [showPassword, setShowPassword] = useState(false);
@@ -46,7 +46,7 @@ function SigninUser() {
     },
   });
 
-  if (user.username) {
+  if (user.email) {
     return <Navigate to="/" replace="true" />;
   }
 
@@ -233,6 +233,7 @@ function SigninUser() {
           </Box>
         </Stack>
       </Center>
+      <ToastContainer />
     </>
   );
 }

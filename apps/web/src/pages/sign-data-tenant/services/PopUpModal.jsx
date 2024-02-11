@@ -17,10 +17,8 @@ export const SuccessModal = ({ isOpen, onClose }) => {
           <ModalHeader textAlign={'center'} color={'green'} fontSize={'24px'}>
             Success!
           </ModalHeader>
-          <ModalBody textAlign={'center'} color={'black'} fontSize={'14px'}>
-            Your account is ready! <b>Verify your email address</b> to access
-            your partner account. Act fast, the verification link{' '}
-            <b>expires in an hour.</b> Welcome aboard!
+          <ModalBody textAlign={'center'} color={'black'} fontSize={'18px'}>
+            Your account is ready.
           </ModalBody>
 
           <ModalFooter>

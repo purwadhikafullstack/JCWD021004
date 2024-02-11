@@ -1,11 +1,14 @@
 import {
   createPropertyQuery,
+  getTenantPropertyQuery,
+  getPropertyDetailQuery,
   deletePropertyQuery,
   getPropertyByName,
   getPropertyQuery,
   updatePropertyQuery,
   findCategoryQuery,
   findCityQuery,
+  findPropertyByCityQuery,
 } from '../queries/property.queries';
 
 export const getPropertyService = async (
@@ -38,6 +41,25 @@ export const getPropertyService = async (
   }
 };
 
+export const getPropertyDetailService = async (property_id) => {
+  try {
+    const res = await getPropertyDetailQuery(property_id);
+
+    return res;
+  } catch (err) {
+    throw err;
+  }
+};
+
+export const getTenantPropertyService = async (tenant_id) => {
+  try {
+    const res = await getTenantPropertyQuery(tenant_id);
+    return res;
+  } catch (err) {
+    throw err;
+  }
+};
+
 export const createPropertyService = async (
   propertyName,
   selectedCategory,
@@ -48,7 +70,6 @@ export const createPropertyService = async (
 ) => {
   try {
     const check = await getPropertyByName({ propertyName });
-    console.log('name', propertyName);
     if (check) throw new Error('Property with that name is already exist');
 
     const res = await createPropertyQuery(
@@ -113,6 +134,15 @@ export const findCategoryService = async () => {
 export const findCityService = async () => {
   try {
     const res = await findCityQuery();
+    return res;
+  } catch (err) {
+    throw err;
+  }
+};
+
+export const findPropertyByCityService = async (selectedCity) => {
+  try {
+    const res = await findPropertyByCityQuery(selectedCity);
     return res;
   } catch (err) {
     throw err;
