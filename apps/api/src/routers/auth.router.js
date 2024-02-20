@@ -1,0 +1,44 @@
+import { Router } from 'express';
+import {
+  registerController,
+  registerTenantController,
+  emailVerificationController,
+  loginController,
+  loginTenantController,
+  forgotPasswordController,
+  keepLoginController,
+  resetPasswordController,
+  googleLoginController,
+} from '../controllers/auth.controller';
+import { validator } from '../middleware/validator.middleware';
+import { verifyToken } from '../middleware/auth.middleware';
+import { body } from 'express-validator';
+const authRouter = Router();
+
+// VALIDATION USING EXPRESS VALIDATOR
+const validations = [
+  body('email').notEmpty().withMessage('Email cannot be emptied'),
+  body('email').isEmail().withMessage('Email format is invalid'),
+  body('username').notEmpty().withMessage('Username cannot be emptied'),
+];
+
+// POST
+authRouter.post(
+  '/user-registration',
+  validator(validations),
+  registerController,
+);
+authRouter.patch('/tenant-registration', registerTenantController);
+authRouter.post('/login', loginController);
+authRouter.post('/login-tenant', loginTenantController);
+authRouter.post('/request-password-reset', forgotPasswordController);
+authRouter.post('/google', googleLoginController);
+
+// GET
+authRouter.get('/keep-login', verifyToken, keepLoginController);
+
+// PUT
+authRouter.put('/email-verification', emailVerificationController);
+authRouter.put('/reset-password', resetPasswordController);
+
+export { authRouter };
